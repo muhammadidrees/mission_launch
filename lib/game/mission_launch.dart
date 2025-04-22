@@ -1,12 +1,13 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/painting.dart';
 import 'package:mission_launch/game/game.dart';
 import 'package:mission_launch/l10n/l10n.dart';
 
-class MissionLaunch extends FlameGame {
+class MissionLaunch extends FlameGame with HasKeyboardHandlerComponents {
   MissionLaunch({
     required this.l10n,
     required this.effectPlayer,
@@ -31,13 +32,15 @@ class MissionLaunch extends FlameGame {
   Future<void> onLoad() async {
     final world = World(
       children: [
-        Unicorn(position: size / 2),
-        CounterComponent(
-          position: (size / 2)
-            ..sub(
-              Vector2(0, 16),
-            ),
-        ),
+        // Unicorn(position: size / 2),
+        // CounterComponent(
+        //   position: (size / 2)
+        //     ..sub(
+        //       Vector2(0, 16),
+        //     ),
+        // ),
+        // Add the spaceship at the bottom of the screen
+        Spaceship(position: Vector2(size.x, size.y - 16)),
       ],
     );
 
@@ -45,6 +48,6 @@ class MissionLaunch extends FlameGame {
     await addAll([world, camera]);
 
     camera.viewfinder.position = size / 2;
-    camera.viewfinder.zoom = 8;
+    // camera.viewfinder.zoom = 8;
   }
 }
