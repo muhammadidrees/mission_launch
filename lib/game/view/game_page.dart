@@ -3,7 +3,6 @@ import 'package:flame_audio/bgm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mission_launch/game/game.dart';
-import 'package:mission_launch/gen/assets.gen.dart';
 import 'package:mission_launch/l10n/l10n.dart';
 import 'package:mission_launch/loading/cubit/cubit.dart';
 

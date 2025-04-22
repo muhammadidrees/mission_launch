@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
 import 'package:flutter/services.dart';
@@ -33,7 +31,6 @@ class KeyboardMovingBehavior extends Behavior<Spaceship>
 
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    log("onKeyEvent: $event, $keysPressed");
     if (keysPressed.contains(leftKey)) {
       _movement = -1;
     } else if (keysPressed.contains(rightKey)) {
@@ -42,10 +39,7 @@ class KeyboardMovingBehavior extends Behavior<Spaceship>
       _movement = 0;
     }
 
-    log(_movement.toString());
-
     return true;
-    // return super.onKeyEvent(event, keysPressed);
   }
 
   @override
