@@ -37,7 +37,6 @@ class MissionLaunch extends FlameGame
     // Create the player spaceship
     _spaceship = Spaceship(
       position: Vector2(size.x / 2, size.y - 32),
-      maxHealth: 3,
     );
 
     // Create the game world with all entities
@@ -48,7 +47,6 @@ class MissionLaunch extends FlameGame
 
         // Add the alien spawner
         AlienSpawner(
-          initialAliens: 3,
           maxAliens: 8,
           spawnInterval: 4,
         ),
