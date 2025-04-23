@@ -7,7 +7,8 @@ import 'package:flutter/painting.dart';
 import 'package:mission_launch/game/game.dart';
 import 'package:mission_launch/l10n/l10n.dart';
 
-class MissionLaunch extends FlameGame with HasKeyboardHandlerComponents {
+class MissionLaunch extends FlameGame
+    with HasKeyboardHandlerComponents, HasCollisionDetection {
   MissionLaunch({
     required this.l10n,
     required this.effectPlayer,
@@ -40,7 +41,13 @@ class MissionLaunch extends FlameGame with HasKeyboardHandlerComponents {
         //     ),
         // ),
         // Add the spaceship at the bottom of the screen
-        Spaceship(position: Vector2(size.x, size.y - 16)),
+        Spaceship(position: Vector2(size.x / 2, size.y - 32)),
+
+        // Add the alien spawner
+        AlienSpawner(
+          maxAliens: 8,
+          spawnInterval: 4,
+        ),
       ],
     );
 
