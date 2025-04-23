@@ -11,6 +11,7 @@ class Spaceship extends PositionedEntity with HasGameReference {
   /// {@macro spaceship}
   Spaceship({
     required super.position,
+    this.maxHealth = 3,
   }) : super(
           anchor: Anchor.center,
           size: Vector2(48, 32),
@@ -22,14 +23,44 @@ class Spaceship extends PositionedEntity with HasGameReference {
               ),
             ),
           ],
-        );
+        ) {
+    _health = maxHealth;
+  }
 
   /// Creates a test spaceship with custom behaviors.
   @visibleForTesting
   Spaceship.test({
     required super.position,
     super.behaviors,
-  }) : super(size: Vector2(48, 32));
+    this.maxHealth = 3,
+  }) : super(size: Vector2(48, 32)) {
+    _health = maxHealth;
+  }
+
+  /// The maximum health of the spaceship
+  final int maxHealth;
+
+  /// Current health of the spaceship
+  int _health = 3;
+
+  /// Get the current health
+  int get health => _health;
+
+  /// Check if the spaceship is destroyed (health <= 0)
+  bool get isDestroyed => _health <= 0;
+
+  /// Decreases the health by the given amount
+  void damage([int amount = 1]) {
+    if (!isDestroyed) {
+      _health -= amount;
+      if (_health < 0) _health = 0;
+    }
+  }
+
+  /// Resets the health to maxHealth
+  void resetHealth() {
+    _health = maxHealth;
+  }
 
   @override
   Future<void> onLoad() async {

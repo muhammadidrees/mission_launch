@@ -26,35 +26,55 @@ class MissionLaunch extends FlameGame
 
   int counter = 0;
 
+  /// Reference to the player's spaceship
+  late Spaceship _spaceship;
+
   @override
   Color backgroundColor() => const Color(0xFF2A48DF);
 
   @override
   Future<void> onLoad() async {
+    // Create the player spaceship
+    _spaceship = Spaceship(
+      position: Vector2(size.x / 2, size.y - 32),
+      maxHealth: 3,
+    );
+
+    // Create the game world with all entities
     final world = World(
       children: [
-        // Unicorn(position: size / 2),
-        // CounterComponent(
-        //   position: (size / 2)
-        //     ..sub(
-        //       Vector2(0, 16),
-        //     ),
-        // ),
         // Add the spaceship at the bottom of the screen
-        Spaceship(position: Vector2(size.x / 2, size.y - 32)),
+        _spaceship,
 
         // Add the alien spawner
         AlienSpawner(
+          initialAliens: 3,
           maxAliens: 8,
           spawnInterval: 4,
         ),
       ],
     );
 
-    final camera = CameraComponent(world: world);
-    await addAll([world, camera]);
+    // Create a UI component for displaying health and other UI elements
+    final uiComponent = PositionComponent()
+
+      // Add health display to the UI
+      ..add(
+        HealthDisplayComponent(
+          spaceship: _spaceship,
+          position: Vector2(10, 10),
+          heartSize: 24,
+        ),
+      );
+
+    // Create and configure the game camera
+    final camera = CameraComponent(
+      world: world,
+    );
+
+    // Add all components to the game
+    await addAll([world, camera, uiComponent]);
 
     camera.viewfinder.position = size / 2;
-    // camera.viewfinder.zoom = 8;
   }
 }
