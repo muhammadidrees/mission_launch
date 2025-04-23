@@ -30,13 +30,16 @@ class MissionLaunch extends FlameGame
   late Spaceship _spaceship;
 
   @override
+  bool get debugMode => true;
+
+  @override
   Color backgroundColor() => const Color(0xFF2A48DF);
 
   @override
   Future<void> onLoad() async {
     // Create the player spaceship
     _spaceship = Spaceship(
-      position: Vector2(size.x / 2, size.y - 32),
+      position: Vector2(size.x / 2, size.y - 80),
     );
 
     // Create the game world with all entities
