@@ -1,3 +1,4 @@
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,12 @@ class Alien extends PositionedEntity with HasGameReference {
           size: Vector2(40, 40),
           behaviors: [
             AutoMovingBehavior(),
+            PropagatingCollisionBehavior(
+              RectangleHitbox(
+                isSolid: true,
+              ),
+            ),
+            SpaceshipCollisionBehavior(),
           ],
         );
 
