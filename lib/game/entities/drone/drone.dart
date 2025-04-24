@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
@@ -73,6 +74,9 @@ class Drone extends PositionedEntity with HasGameReference<MissionLaunch> {
 
   /// Current health of the drone
   late int _health;
+  
+  /// Animation component reference
+  SpriteAnimationComponent? _animationComponent;
 
   /// Whether this drone is destroyed
   bool get isDestroyed => _health <= 0;
@@ -87,11 +91,29 @@ class Drone extends PositionedEntity with HasGameReference<MissionLaunch> {
   void takeDamage([int amount = 1]) {
     _health -= amount;
 
-    // Remove if health reaches 0
+    // If health reaches 0, create falling drone and remove this one
     if (_health <= 0) {
-      removeFromParent();
-      // Add explosion effect or sound here
+      // Create a falling drone at this position
+      if (_animationComponent != null) {
+        final fallingDrone = FallingDrone(
+          position: position.clone(),
+          spriteComponent: _animationComponent!,
+          droneType: _type,
+          fallSpeed: 150 + Random().nextDouble() * 100, // Random speed between 150-250
+          rotationSpeed: (Random().nextDouble() * 4) - 2, // Random rotation between -2 and 2
+        );
+        
+        parent?.add(fallingDrone);
+      }
+      
+      // Add score
       game.counter += 2; // More points than regular aliens
+      
+      // Play destruction sound
+      game.effectPlayer.play(AssetSource('audio/effect.mp3'));
+      
+      // Remove the original drone
+      removeFromParent();
     }
   }
 
@@ -107,11 +129,11 @@ class Drone extends PositionedEntity with HasGameReference<MissionLaunch> {
       ),
     );
 
-    final animationComponent = SpriteAnimationComponent(
+    _animationComponent = SpriteAnimationComponent(
       animation: animation,
       size: size,
     );
 
-    await add(animationComponent);
+    await add(_animationComponent!);
   }
 }
