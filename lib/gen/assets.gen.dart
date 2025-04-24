@@ -25,6 +25,18 @@ class $AssetsAudioGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/asteroid-1.png
+  AssetGenImage get asteroid1 =>
+      const AssetGenImage('assets/images/asteroid-1.png');
+
+  /// File path: assets/images/asteroid-2.png
+  AssetGenImage get asteroid2 =>
+      const AssetGenImage('assets/images/asteroid-2.png');
+
+  /// File path: assets/images/asteroid-3.png
+  AssetGenImage get asteroid3 =>
+      const AssetGenImage('assets/images/asteroid-3.png');
+
   /// File path: assets/images/spaceship_idle.png
   AssetGenImage get spaceshipIdle =>
       const AssetGenImage('assets/images/spaceship_idle.png');
@@ -34,7 +46,13 @@ class $AssetsImagesGen {
       const AssetGenImage('assets/images/unicorn_animation.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [spaceshipIdle, unicornAnimation];
+  List<AssetGenImage> get values => [
+    asteroid1,
+    asteroid2,
+    asteroid3,
+    spaceshipIdle,
+    unicornAnimation,
+  ];
 }
 
 class $AssetsLicensesGen {
