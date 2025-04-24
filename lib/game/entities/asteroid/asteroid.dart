@@ -1,6 +1,8 @@
 import 'dart:math';
+import 'dart:ui';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
 import 'package:mission_launch/game/entities/asteroid/behaviors/behaviors.dart';
 import 'package:mission_launch/game/game.dart';
@@ -39,14 +41,14 @@ enum AsteroidType {
   final int health;
   final int damage;
 
-  String get asset {
+  Image getAsset(FlameGame<World> game) {
     switch (this) {
       case AsteroidType.small:
-        return Assets.images.asteroid1.path;
+        return game.images.fromCache(Assets.images.asteroid1.path);
       case AsteroidType.medium:
-        return Assets.images.asteroid2.path;
+        return game.images.fromCache(Assets.images.asteroid2.path);
       case AsteroidType.large:
-        return Assets.images.asteroid3.path;
+        return game.images.fromCache(Assets.images.asteroid3.path);
     }
   }
 }
@@ -130,8 +132,8 @@ class Asteroid extends PositionedEntity with HasGameReference<MissionLaunch> {
   @override
   Future<void> onLoad() async {
     await add(
-      SpriteComponent(
-        sprite: await game.loadSprite(_type.asset),
+      SpriteComponent.fromImage(
+        _type.getAsset(game),
         size: size,
       ),
     );

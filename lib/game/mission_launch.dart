@@ -32,7 +32,7 @@ class MissionLaunch extends FlameGame
   late Spaceship _spaceship;
 
   @override
-  bool get debugMode => true;
+  bool get debugMode => false;
 
   @override
   Color backgroundColor() => const Color(0xFF050A30);
