@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
 import 'package:flutter/services.dart';
@@ -39,7 +41,7 @@ class KeyboardMovingBehavior extends Behavior<Spaceship>
       _movement = 0;
     }
 
-    return true;
+    return super.onKeyEvent(event, keysPressed);
   }
 
   @override

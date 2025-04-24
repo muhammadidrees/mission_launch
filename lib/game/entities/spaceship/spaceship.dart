@@ -19,6 +19,7 @@ class Spaceship extends PositionedEntity with HasGameReference {
           scale: Vector2.all(2),
           behaviors: [
             KeyboardMovingBehavior(),
+            ShootingBehavior(),
             PropagatingCollisionBehavior(
               RectangleHitbox(
                 isSolid: true,
