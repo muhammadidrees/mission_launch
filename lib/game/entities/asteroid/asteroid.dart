@@ -2,7 +2,6 @@ import 'dart:math';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
-import 'package:flutter/material.dart';
 import 'package:mission_launch/game/entities/asteroid/behaviors/behaviors.dart';
 import 'package:mission_launch/game/game.dart';
 import 'package:mission_launch/gen/assets.gen.dart';
@@ -89,20 +88,6 @@ class Asteroid extends PositionedEntity with HasGameReference<MissionLaunch> {
     _health = _type.health;
     size = Vector2.all(30 * _type.size);
     _speedMultiplier = _type.speed;
-  }
-
-  /// Creates a test asteroid with custom behaviors.
-  @visibleForTesting
-  Asteroid.test({
-    required super.position,
-    super.behaviors,
-    this.baseSpeed = 100,
-    this.targetSpaceship = false,
-    this.rotationSpeed = 0.5,
-    AsteroidType? type,
-  }) : super(size: Vector2.all(30)) {
-    _type = type ?? AsteroidType.small;
-    _health = _type.health;
   }
 
   /// Base speed of the asteroid in pixels per second

@@ -5,6 +5,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/painting.dart';
 import 'package:mission_launch/game/components/asteroid_spawner.dart';
+import 'package:mission_launch/game/components/drone_spawner.dart';
 import 'package:mission_launch/game/game.dart';
 import 'package:mission_launch/l10n/l10n.dart';
 
@@ -34,7 +35,7 @@ class MissionLaunch extends FlameGame
   bool get debugMode => true;
 
   @override
-  Color backgroundColor() => const Color(0xFF2A48DF);
+  Color backgroundColor() => const Color(0xFF050A30);
 
   @override
   Future<void> onLoad() async {
@@ -50,12 +51,14 @@ class MissionLaunch extends FlameGame
         _spaceship,
 
         // Add the alien spawner
-        AlienSpawner(
-          maxAliens: 8,
-          spawnInterval: 4,
-        ),
+        // AlienSpawner(
+        //   maxAliens: 8,
+        //   spawnInterval: 4,
+        // ),
 
         AsteroidSpawner(),
+
+        DroneSpawner(),
       ],
     );
 

@@ -4,9 +4,9 @@ import 'package:flame_behaviors/flame_behaviors.dart';
 import 'package:mission_launch/game/game.dart';
 
 /// {@template bullet_collision_behavior}
-/// A behavior that handles collisions between asteroids and bullets.
+/// A behavior that handles collisions between player bullets and drones.
 /// {@endtemplate}
-class BulletCollisionBehavior extends CollisionBehavior<Bullet, Asteroid>
+class BulletCollisionBehavior extends CollisionBehavior<Bullet, Drone>
     with HasGameReference<MissionLaunch> {
   /// {@macro bullet_collision_behavior}
   BulletCollisionBehavior();
@@ -21,12 +21,7 @@ class BulletCollisionBehavior extends CollisionBehavior<Bullet, Asteroid>
     // Remove the bullet
     other.removeFromParent();
 
-    // Damage the asteroid
+    // Damage the drone
     parent.takeDamage();
-
-    // Add score only if asteroid is destroyed
-    if (parent.isDestroyed) {
-      game.counter++;
-    }
   }
 }

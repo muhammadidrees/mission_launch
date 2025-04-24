@@ -75,4 +75,9 @@ class AsteroidMovingBehavior extends Behavior<Asteroid>
       _setRandomDirection();
     }
   }
+
+  /// Set a new direction for the asteroid, used for collision bounces
+  void setDirection(Vector2 newDirection) {
+    _direction = newDirection.normalized();
+  }
 }

@@ -1,7 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
-import 'package:mission_launch/game/entities/bullet/bullet.dart';
 import 'package:mission_launch/game/game.dart';
 
 /// {@template alien_collision_behavior}
