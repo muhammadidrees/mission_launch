@@ -48,7 +48,7 @@ class Drone extends PositionedEntity with HasGameReference<MissionLaunch> {
     required super.position,
     DroneType? type,
   }) : super(
-          scale: Vector2.all(2),
+          scale: Vector2.all(1.4),
           anchor: Anchor.center,
           behaviors: [
             PropagatingCollisionBehavior(
@@ -66,7 +66,7 @@ class Drone extends PositionedEntity with HasGameReference<MissionLaunch> {
 
     // Initialize properties based on type
     _health = _type.health;
-    size = Vector2(32, 32) * _type.size;
+    size = Vector2(56, 48) * _type.size;
   }
 
   /// The type of drone
@@ -74,9 +74,6 @@ class Drone extends PositionedEntity with HasGameReference<MissionLaunch> {
 
   /// Current health of the drone
   late int _health;
-  
-  /// Animation component reference
-  SpriteAnimationComponent? _animationComponent;
 
   /// Whether this drone is destroyed
   bool get isDestroyed => _health <= 0;
@@ -94,24 +91,24 @@ class Drone extends PositionedEntity with HasGameReference<MissionLaunch> {
     // If health reaches 0, create falling drone and remove this one
     if (_health <= 0) {
       // Create a falling drone at this position
-      if (_animationComponent != null) {
-        final fallingDrone = FallingDrone(
-          position: position.clone(),
-          spriteComponent: _animationComponent!,
-          droneType: _type,
-          fallSpeed: 150 + Random().nextDouble() * 100, // Random speed between 150-250
-          rotationSpeed: (Random().nextDouble() * 4) - 2, // Random rotation between -2 and 2
-        );
-        
-        parent?.add(fallingDrone);
-      }
-      
+      // using the broken drone animation
+      final fallingDrone = FallingDrone(
+        position: position.clone(),
+        droneType: _type,
+        fallSpeed:
+            150 + Random().nextDouble() * 100, // Random speed between 150-250
+        rotationSpeed:
+            (Random().nextDouble() * 4) - 2, // Random rotation between -2 and 2
+      );
+
+      parent?.add(fallingDrone);
+
       // Add score
       game.counter += 2; // More points than regular aliens
-      
+
       // Play destruction sound
       game.effectPlayer.play(AssetSource('audio/effect.mp3'));
-      
+
       // Remove the original drone
       removeFromParent();
     }
@@ -124,16 +121,16 @@ class Drone extends PositionedEntity with HasGameReference<MissionLaunch> {
       game.images.fromCache(Assets.images.drone.path),
       SpriteAnimationData.sequenced(
         amount: _type.frameCount,
-        stepTime: 0.15,
+        stepTime: 0.1,
         textureSize: Vector2(56, 48),
       ),
     );
 
-    _animationComponent = SpriteAnimationComponent(
-      animation: animation,
-      size: size,
+    await add(
+      SpriteAnimationComponent(
+        animation: animation,
+        size: size,
+      ),
     );
-
-    await add(_animationComponent!);
   }
 }

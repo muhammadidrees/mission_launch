@@ -4,22 +4,24 @@ import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
 import 'package:flutter/material.dart';
 import 'package:mission_launch/game/game.dart';
+import 'package:mission_launch/gen/assets.gen.dart';
 
 /// {@template falling_drone}
-/// A component representing a destroyed drone that falls and can damage the spaceship.
+/// A component representing a destroyed drone that falls
+/// and can damage the spaceship.
 /// {@endtemplate}
 class FallingDrone extends PositionedEntity
     with HasGameReference<MissionLaunch> {
   /// {@macro falling_drone}
   FallingDrone({
     required super.position,
-    required this.spriteComponent,
     required this.droneType,
     this.fallSpeed = 200,
-    this.rotationSpeed = 2.0,
+    this.rotationSpeed = 1.5,
   }) : super(
+          scale: Vector2.all(1.4),
           anchor: Anchor.center,
-          size: spriteComponent.size,
+          size: Vector2(56, 48) * droneType.size,
           behaviors: [
             PropagatingCollisionBehavior(
               CircleHitbox(
@@ -29,9 +31,6 @@ class FallingDrone extends PositionedEntity
             _SpaceshipCollisionBehavior(),
           ],
         );
-
-  /// The sprite component to display
-  final SpriteAnimationComponent spriteComponent;
 
   /// The type of drone this was
   final DroneType droneType;
@@ -44,21 +43,22 @@ class FallingDrone extends PositionedEntity
 
   @override
   Future<void> onLoad() async {
-    // Create a copy of the sprite animation with a dark tint to show it's damaged
-    final animation = spriteComponent.animation;
-    if (animation != null) {
-      final tintedSprite = SpriteAnimationComponent(
+    // Use the dedicated broken drone animation
+    final animation = SpriteAnimation.fromFrameData(
+      game.images.fromCache(Assets.images.droneBroken.path),
+      SpriteAnimationData.sequenced(
+        amount: 2,
+        stepTime: 0.1,
+        textureSize: Vector2(56, 48),
+      ),
+    );
+
+    await add(
+      SpriteAnimationComponent(
         animation: animation,
         size: size,
-        paint: Paint()
-          ..colorFilter = const ColorFilter.mode(
-            Colors.black54,
-            BlendMode.srcATop,
-          ),
-      );
-
-      await add(tintedSprite);
-    }
+      ),
+    );
   }
 
   @override

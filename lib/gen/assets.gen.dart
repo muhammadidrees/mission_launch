@@ -37,6 +37,10 @@ class $AssetsImagesGen {
   AssetGenImage get asteroid3 =>
       const AssetGenImage('assets/images/asteroid-3.png');
 
+  /// File path: assets/images/drone-broken.png
+  AssetGenImage get droneBroken =>
+      const AssetGenImage('assets/images/drone-broken.png');
+
   /// File path: assets/images/drone.png
   AssetGenImage get drone => const AssetGenImage('assets/images/drone.png');
 
@@ -53,6 +57,7 @@ class $AssetsImagesGen {
     asteroid1,
     asteroid2,
     asteroid3,
+    droneBroken,
     drone,
     spaceshipIdle,
     unicornAnimation,

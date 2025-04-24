@@ -18,9 +18,10 @@ class AsteroidCollisionBehavior extends CollisionBehavior<Asteroid, Drone>
 
     // Calculate bounce direction for the asteroid
     final bounceDirection = (other.position - parent.position).normalized();
-    
+
     // Find the asteroid's moving behavior to change its direction
-    final movingBehavior = other.children.whereType<AsteroidMovingBehavior>().firstOrNull;
+    final movingBehavior =
+        other.children.whereType<AsteroidMovingBehavior>().firstOrNull;
     if (movingBehavior != null) {
       // Set new direction for asteroid (bounce effect)
       movingBehavior.setDirection(bounceDirection);
