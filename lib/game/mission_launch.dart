@@ -4,6 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/painting.dart';
+import 'package:mission_launch/game/components/asteroid_spawner.dart';
 import 'package:mission_launch/game/game.dart';
 import 'package:mission_launch/l10n/l10n.dart';
 
@@ -53,6 +54,8 @@ class MissionLaunch extends FlameGame
           maxAliens: 8,
           spawnInterval: 4,
         ),
+
+        AsteroidSpawner(),
       ],
     );
 
