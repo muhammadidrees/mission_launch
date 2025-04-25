@@ -1,9 +1,11 @@
 import 'dart:math';
-import 'dart:ui';
+import 'dart:ui' as ui;
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
+import 'package:flutter/material.dart';
 import 'package:mission_launch/game/entities/asteroid/behaviors/behaviors.dart';
 import 'package:mission_launch/game/game.dart';
 import 'package:mission_launch/gen/assets.gen.dart';
@@ -41,7 +43,7 @@ enum AsteroidType {
   final int health;
   final int damage;
 
-  Image getAsset(FlameGame<World> game) {
+  ui.Image getAsset(FlameGame<World> game) {
     switch (this) {
       case AsteroidType.small:
         return game.images.fromCache(Assets.images.asteroid1.path);
@@ -87,7 +89,8 @@ class Asteroid extends PositionedEntity with HasGameReference<MissionLaunch> {
         AsteroidType.values[Random().nextInt(AsteroidType.values.length)];
 
     // Set up asteroid properties based on type
-    _health = _type.health;
+    _maxHealth = _type.health;
+    _health = _maxHealth;
     size = Vector2.all(30 * _type.size);
     _speedMultiplier = _type.speed;
   }
@@ -104,11 +107,20 @@ class Asteroid extends PositionedEntity with HasGameReference<MissionLaunch> {
   /// The type of asteroid
   late final AsteroidType _type;
 
+  /// Maximum health of the asteroid
+  late final int _maxHealth;
+
   /// Current health of the asteroid
   late int _health;
 
   /// Speed multiplier based on asteroid type
   late double _speedMultiplier;
+
+  /// Reference to the asteroid sprite
+  SpriteComponent? _asteroidSprite;
+
+  /// List of crack components showing damage
+  final List<Component> _cracks = [];
 
   /// Get the effective speed of this asteroid
   double get speed => baseSpeed * _speedMultiplier;
@@ -121,22 +133,82 @@ class Asteroid extends PositionedEntity with HasGameReference<MissionLaunch> {
 
   /// Reduce health by the given amount
   void takeDamage([int amount = 1]) {
+    final oldHealth = _health;
     _health -= amount;
 
-    // Remove if health reaches 0
-    if (_health <= 0) {
-      removeFromParent();
+    // Add cracks if damaged but not destroyed
+    if (_health > 0 && oldHealth > _health) {
+      _showDamage();
     }
+
+    // Show explosion animation and remove if health reaches 0
+    if (_health <= 0) {
+      _explode();
+    }
+  }
+
+  /// Add visual damage effects to the asteroid
+  void _showDamage() {
+    // Clear previous cracks
+    for (final crack in _cracks) {
+      crack.removeFromParent();
+    }
+    _cracks.clear();
+
+    // Calculate damage percentage
+    final damagePercent = (_maxHealth - _health) / _maxHealth;
+
+    // Adjust the color to show damage
+    if (_asteroidSprite != null) {
+      _asteroidSprite!.paint.color = Color.lerp(
+        Colors.black,
+        Colors.red.withOpacity(0.8),
+        damagePercent,
+      )!;
+    }
+  }
+
+  /// Show explosion animation and then remove the asteroid
+  void _explode() {
+    // Get the position and size for the explosion
+    final explosionPosition = position.clone();
+    final explosionSize = size.clone() * 1.5;
+
+    // Create explosion animation
+    final explosion = SpriteAnimationComponent(
+      animation: SpriteAnimation.fromFrameData(
+        game.images.fromCache(Assets.images.explode.path),
+        SpriteAnimationData.sequenced(
+          amount: 4,
+          stepTime: 0.1,
+          textureSize: Vector2.all(40),
+          loop: false,
+        ),
+      ),
+      position: explosionPosition,
+      size: explosionSize,
+      anchor: Anchor.center,
+      removeOnFinish: true,
+    );
+
+    // Add the explosion to the game
+    game.add(explosion);
+
+    // Play explosion sound
+    game.effectPlayer.play(AssetSource('audio/effect.mp3'));
+
+    // Remove the asteroid
+    removeFromParent();
   }
 
   @override
   Future<void> onLoad() async {
-    await add(
-      SpriteComponent.fromImage(
-        _type.getAsset(game),
-        size: size,
-      ),
+    _asteroidSprite = SpriteComponent.fromImage(
+      _type.getAsset(game),
+      size: size,
     );
+
+    await add(_asteroidSprite!);
 
     // Start with a random rotation
     angle = Random().nextDouble() * 2 * pi;
