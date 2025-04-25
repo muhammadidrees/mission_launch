@@ -27,6 +27,7 @@ class PreloadCubit extends Cubit<PreloadState> {
           Assets.images.spaceshipIdle.path,
           Assets.images.spaceshipLeft.path,
           Assets.images.spaceshipRight.path,
+          Assets.images.spaceshipBroken.path,
           Assets.images.asteroid1.path,
           Assets.images.asteroid2.path,
           Assets.images.asteroid3.path,

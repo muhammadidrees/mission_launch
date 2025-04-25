@@ -54,6 +54,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/explode.png
   AssetGenImage get explode => const AssetGenImage('assets/images/explode.png');
 
+  /// File path: assets/images/spaceship-broken.png
+  AssetGenImage get spaceshipBroken =>
+      const AssetGenImage('assets/images/spaceship-broken.png');
+
   /// File path: assets/images/spaceship-left.png
   AssetGenImage get spaceshipLeft =>
       const AssetGenImage('assets/images/spaceship-left.png');
@@ -80,6 +84,7 @@ class $AssetsImagesGen {
     droneBroken,
     drone,
     explode,
+    spaceshipBroken,
     spaceshipLeft,
     spaceshipRight,
     spaceshipIdle,
