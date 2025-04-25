@@ -25,6 +25,8 @@ class PreloadCubit extends Cubit<PreloadState> {
         () => images.loadAll([
           Assets.images.unicornAnimation.path,
           Assets.images.spaceshipIdle.path,
+          Assets.images.spaceshipLeft.path,
+          Assets.images.spaceshipRight.path,
           Assets.images.asteroid1.path,
           Assets.images.asteroid2.path,
           Assets.images.asteroid3.path,
