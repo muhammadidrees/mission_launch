@@ -118,8 +118,7 @@ class Spaceship extends PositionedEntity with HasGameReference {
     _animations[SpaceshipState.left] = SpriteAnimation.fromFrameData(
       game.images.fromCache(Assets.images.spaceshipLeft.path),
       SpriteAnimationData.sequenced(
-        amount:
-            4, // Update this if your left animation has a different number of frames
+        amount: 4,
         stepTime: 0.1,
         textureSize: Vector2(40, 56),
       ),
@@ -128,8 +127,7 @@ class Spaceship extends PositionedEntity with HasGameReference {
     _animations[SpaceshipState.right] = SpriteAnimation.fromFrameData(
       game.images.fromCache(Assets.images.spaceshipRight.path),
       SpriteAnimationData.sequenced(
-        amount:
-            4, // Update this if your right animation has a different number of frames
+        amount: 4,
         stepTime: 0.1,
         textureSize: Vector2(40, 56),
       ),
