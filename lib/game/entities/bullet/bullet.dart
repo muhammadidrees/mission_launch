@@ -21,7 +21,6 @@ class Bullet extends PositionedEntity with HasGameReference {
                 isSolid: true,
               ),
             ),
-            AlienCollisionBehavior(),
           ],
         );
 
