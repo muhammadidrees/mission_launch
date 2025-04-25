@@ -5,6 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:mission_launch/game/entities/spaceship/behaviors/behaviors.dart';
 import 'package:mission_launch/gen/assets.gen.dart';
 
+/// Defines the different states of the spaceship
+enum SpaceshipState {
+  idle,
+  left,
+  right,
+}
+
 /// {@template spaceship}
 /// A spaceship that can be controlled with left/right arrow keys.
 /// {@endtemplate}
@@ -45,6 +52,15 @@ class Spaceship extends PositionedEntity with HasGameReference {
 
   /// Current health of the spaceship
   int _health = 3;
+  
+  /// The current state of the spaceship
+  SpaceshipState _currentState = SpaceshipState.idle;
+  
+  /// Map to store animations for different states
+  final Map<SpaceshipState, SpriteAnimation> _animations = {};
+  
+  /// The sprite animation component for the spaceship
+  SpriteAnimationComponent? _animationComponent;
 
   /// Get the current health
   int get health => _health;
@@ -64,10 +80,26 @@ class Spaceship extends PositionedEntity with HasGameReference {
   void resetHealth() {
     _health = maxHealth;
   }
+  
+  /// Sets the state of the spaceship and updates its animation
+  void setState(SpaceshipState state) {
+    if (_currentState == state || isDestroyed) return;
+    
+    _currentState = state;
+    _updateAnimation();
+  }
+  
+  /// Updates the spaceship animation to match the current state
+  void _updateAnimation() {
+    if (_animationComponent != null && _animations.containsKey(_currentState)) {
+      _animationComponent!.animation = _animations[_currentState];
+    }
+  }
 
   @override
   Future<void> onLoad() async {
-    final animation = SpriteAnimation.fromFrameData(
+    // Load all spaceship animations
+    _animations[SpaceshipState.idle] = SpriteAnimation.fromFrameData(
       game.images.fromCache(Assets.images.spaceshipIdle.path),
       SpriteAnimationData.sequenced(
         amount: 4,
@@ -75,11 +107,31 @@ class Spaceship extends PositionedEntity with HasGameReference {
         textureSize: Vector2(40, 56),
       ),
     );
-    await add(
-      SpriteAnimationComponent(
-        animation: animation,
-        size: size,
+    
+    _animations[SpaceshipState.left] = SpriteAnimation.fromFrameData(
+      game.images.fromCache(Assets.images.spaceshipLeft.path),
+      SpriteAnimationData.sequenced(
+        amount: 4, // Update this if your left animation has a different number of frames
+        stepTime: 0.1,
+        textureSize: Vector2(40, 56),
       ),
     );
+    
+    _animations[SpaceshipState.right] = SpriteAnimation.fromFrameData(
+      game.images.fromCache(Assets.images.spaceshipRight.path),
+      SpriteAnimationData.sequenced(
+        amount: 4, // Update this if your right animation has a different number of frames
+        stepTime: 0.1,
+        textureSize: Vector2(40, 56),
+      ),
+    );
+    
+    // Create the animation component with the idle animation initially
+    _animationComponent = SpriteAnimationComponent(
+      animation: _animations[SpaceshipState.idle],
+      size: size,
+    );
+    
+    await add(_animationComponent!);
   }
 }

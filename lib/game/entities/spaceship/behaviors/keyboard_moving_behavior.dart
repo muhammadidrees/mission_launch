@@ -31,12 +31,16 @@ class KeyboardMovingBehavior extends Behavior<Spaceship>
 
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    // Update movement direction
     if (keysPressed.contains(leftKey)) {
       _movement = -1;
+      parent.setState(SpaceshipState.left); // Change animation to left
     } else if (keysPressed.contains(rightKey)) {
       _movement = 1;
+      parent.setState(SpaceshipState.right); // Change animation to right
     } else {
       _movement = 0;
+      parent.setState(SpaceshipState.idle); // Change animation to idle
     }
 
     return super.onKeyEvent(event, keysPressed);
