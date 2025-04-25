@@ -25,6 +25,13 @@ class $AssetsAudioGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/alien-broken.png
+  AssetGenImage get alienBroken =>
+      const AssetGenImage('assets/images/alien-broken.png');
+
+  /// File path: assets/images/alien.png
+  AssetGenImage get alien => const AssetGenImage('assets/images/alien.png');
+
   /// File path: assets/images/asteroid-1.png
   AssetGenImage get asteroid1 =>
       const AssetGenImage('assets/images/asteroid-1.png');
@@ -57,6 +64,8 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
+    alienBroken,
+    alien,
     asteroid1,
     asteroid2,
     asteroid3,
