@@ -9,7 +9,7 @@ class AsteroidSpawner extends Component with HasGameReference<MissionLaunch> {
     this.spawnInterval = 3.0,
     this.minInterval = 1.0,
     this.maxInterval = 5.0,
-    this.maxAsteroids = 5,
+    this.maxAsteroids = 4,
     this.targetSpaceshipProbability = 0.3,
     this.difficultyIncrease = 0.05,
   }) : _currentInterval = spawnInterval;

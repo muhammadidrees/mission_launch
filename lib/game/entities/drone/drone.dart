@@ -15,6 +15,7 @@ enum DroneType {
     fireRate: 2,
     damage: 1,
     frameCount: 4,
+    flyInSpeed: 300,
   ),
   large(
     size: 1.5,
@@ -22,6 +23,7 @@ enum DroneType {
     fireRate: 1.5,
     damage: 2,
     frameCount: 4,
+    flyInSpeed: 250,
   );
 
   const DroneType({
@@ -30,6 +32,7 @@ enum DroneType {
     required this.fireRate,
     required this.damage,
     required this.frameCount,
+    required this.flyInSpeed,
   });
 
   final double size;
@@ -37,15 +40,17 @@ enum DroneType {
   final double fireRate;
   final int damage;
   final int frameCount;
+  final double flyInSpeed;
 }
 
 /// {@template drone}
-/// An enemy drone that stays in one position and shoots bullets.
+/// An enemy drone that flies in from an edge, hovers in place, and shoots bullets.
 /// {@endtemplate}
 class Drone extends PositionedEntity with HasGameReference<MissionLaunch> {
   /// {@macro drone}
   Drone({
     required super.position,
+    required Vector2 targetPosition,
     DroneType? type,
   }) : super(
           scale: Vector2.all(1.4),
@@ -56,7 +61,6 @@ class Drone extends PositionedEntity with HasGameReference<MissionLaunch> {
                 isSolid: true,
               ),
             ),
-            DroneShootingBehavior(),
             BulletCollisionBehavior(),
             AsteroidCollisionBehavior(),
           ],
@@ -67,6 +71,16 @@ class Drone extends PositionedEntity with HasGameReference<MissionLaunch> {
     // Initialize properties based on type
     _health = _type.health;
     size = Vector2(56, 48) * _type.size;
+    
+    // Add movement behavior (fly in, then hover)
+    add(DroneMovingBehavior(
+      targetPosition: targetPosition,
+      flyInSpeed: _type.flyInSpeed,
+    ));
+    
+    // Add shooting behavior
+    // Only shoot when in hovering state to avoid shooting while flying in
+    add(DroneShootingBehavior());
   }
 
   /// The type of drone

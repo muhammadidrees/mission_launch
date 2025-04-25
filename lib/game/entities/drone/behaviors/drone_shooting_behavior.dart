@@ -5,9 +5,11 @@ import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
 import 'package:flutter/material.dart';
 import 'package:mission_launch/game/game.dart';
+import 'package:mission_launch/game/entities/drone/behaviors/drone_moving_behavior.dart';
 
 /// {@template drone_shooting_behavior}
 /// A behavior that makes the drone shoot bullets periodically.
+/// Only shoots when the drone is hovering, not when flying in.
 /// {@endtemplate}
 class DroneShootingBehavior extends Behavior<Drone>
     with HasGameReference<MissionLaunch> {
@@ -30,6 +32,12 @@ class DroneShootingBehavior extends Behavior<Drone>
   @override
   void update(double dt) {
     if (parent.isDestroyed) return;
+    
+    // Only shoot when the drone is hovering, not when flying in
+    final movingBehavior = parent.children.whereType<DroneMovingBehavior>().firstOrNull;
+    if (movingBehavior == null || movingBehavior.currentState != DroneMovementState.hovering) {
+      return;
+    }
 
     _timeUntilNextShot -= dt;
 
