@@ -30,6 +30,7 @@ class PreloadCubit extends Cubit<PreloadState> {
           Assets.images.asteroid3.path,
           Assets.images.drone.path,
           Assets.images.droneBroken.path,
+          Assets.images.explode.path,
         ]),
       ),
     ];
