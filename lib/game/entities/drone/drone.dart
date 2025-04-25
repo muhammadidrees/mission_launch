@@ -71,13 +71,13 @@ class Drone extends PositionedEntity with HasGameReference<MissionLaunch> {
     // Initialize properties based on type
     _health = _type.health;
     size = Vector2(56, 48) * _type.size;
-    
+
     // Add movement behavior (fly in, then hover)
     add(DroneMovingBehavior(
       targetPosition: targetPosition,
       flyInSpeed: _type.flyInSpeed,
     ));
-    
+
     // Add shooting behavior
     // Only shoot when in hovering state to avoid shooting while flying in
     add(DroneShootingBehavior());

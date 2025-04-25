@@ -32,10 +32,12 @@ class DroneShootingBehavior extends Behavior<Drone>
   @override
   void update(double dt) {
     if (parent.isDestroyed) return;
-    
+
     // Only shoot when the drone is hovering, not when flying in
-    final movingBehavior = parent.children.whereType<DroneMovingBehavior>().firstOrNull;
-    if (movingBehavior == null || movingBehavior.currentState != DroneMovementState.hovering) {
+    final movingBehavior =
+        parent.children.whereType<DroneMovingBehavior>().firstOrNull;
+    if (movingBehavior == null ||
+        movingBehavior.currentState != DroneMovementState.hovering) {
       return;
     }
 
