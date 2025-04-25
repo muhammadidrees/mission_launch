@@ -195,7 +195,7 @@ class Asteroid extends PositionedEntity with HasGameReference<MissionLaunch> {
     game.add(explosion);
 
     // Play explosion sound
-    game.effectPlayer.play(AssetSource('audio/effect.mp3'));
+    game.effectPlayer.play(AssetSource(Assets.audio.asteriodExplode));
 
     // Remove the asteroid
     removeFromParent();

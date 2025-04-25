@@ -2,6 +2,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
 import 'package:mission_launch/game/game.dart';
+import 'package:mission_launch/gen/assets.gen.dart';
 
 /// {@template bullet_collision_behavior}
 /// A behavior that handles collisions between asteroids and bullets.
@@ -16,7 +17,7 @@ class BulletCollisionBehavior extends CollisionBehavior<Bullet, Asteroid>
     super.onCollisionStart(intersectionPoints, other);
 
     // Play hit sound
-    game.effectPlayer.play(AssetSource('audio/effect.mp3'));
+    game.effectPlayer.play(AssetSource(Assets.audio.asteriodHit));
 
     // Remove the bullet
     other.removeFromParent();

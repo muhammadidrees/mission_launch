@@ -12,14 +12,29 @@ import 'package:flutter/widgets.dart';
 class $AssetsAudioGen {
   const $AssetsAudioGen();
 
+  /// File path: assets/audio/asteriod-explode.mp3
+  String get asteriodExplode => 'assets/audio/asteriod-explode.mp3';
+
+  /// File path: assets/audio/asteriod-hit.mp3
+  String get asteriodHit => 'assets/audio/asteriod-hit.mp3';
+
   /// File path: assets/audio/background.mp3
   String get background => 'assets/audio/background.mp3';
 
   /// File path: assets/audio/effect.mp3
   String get effect => 'assets/audio/effect.mp3';
 
+  /// File path: assets/audio/spaceship-shoot.mp3
+  String get spaceshipShoot => 'assets/audio/spaceship-shoot.mp3';
+
   /// List of all assets
-  List<String> get values => [background, effect];
+  List<String> get values => [
+    asteriodExplode,
+    asteriodHit,
+    background,
+    effect,
+    spaceshipShoot,
+  ];
 }
 
 class $AssetsImagesGen {

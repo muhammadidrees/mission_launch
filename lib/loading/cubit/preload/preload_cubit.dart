@@ -18,7 +18,13 @@ class PreloadCubit extends Cubit<PreloadState> {
     final phases = [
       PreloadPhase(
         'audio',
-        () => audio.loadAll([Assets.audio.background, Assets.audio.effect]),
+        () => audio.loadAll([
+          Assets.audio.background,
+          Assets.audio.effect,
+          Assets.audio.asteriodHit,
+          Assets.audio.asteriodExplode,
+          Assets.audio.spaceshipShoot,
+        ]),
       ),
       PreloadPhase(
         'images',

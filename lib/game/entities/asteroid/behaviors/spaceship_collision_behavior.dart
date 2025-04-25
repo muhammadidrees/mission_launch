@@ -3,6 +3,7 @@ import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
 import 'package:flutter/material.dart';
 import 'package:mission_launch/game/game.dart';
+import 'package:mission_launch/gen/assets.gen.dart';
 
 /// {@template spaceship_collision_behavior}
 /// A behavior that handles collisions between asteroids and the spaceship.
@@ -52,7 +53,7 @@ class SpaceshipCollisionBehavior extends CollisionBehavior<Spaceship, Asteroid>
     other.damage(parent.damage);
 
     // Play collision sound
-    game.effectPlayer.play(AssetSource('audio/effect.mp3'));
+    game.effectPlayer.play(AssetSource(Assets.audio.asteriodHit));
 
     // Remove the asteroid
     parent.removeFromParent();

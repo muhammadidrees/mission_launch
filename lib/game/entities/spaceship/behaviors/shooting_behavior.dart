@@ -1,14 +1,17 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
 import 'package:flutter/services.dart';
 import 'package:mission_launch/game/entities/bullet/bullet.dart';
 import 'package:mission_launch/game/entities/spaceship/spaceship.dart';
+import 'package:mission_launch/game/mission_launch.dart';
+import 'package:mission_launch/gen/assets.gen.dart';
 
 /// {@template shooting_behavior}
 /// A behavior that allows the spaceship to shoot bullets.
 /// {@endtemplate}
 class ShootingBehavior extends Behavior<Spaceship>
-    with KeyboardHandler, HasGameReference {
+    with KeyboardHandler, HasGameReference<MissionLaunch> {
   /// {@macro shooting_behavior}
   ShootingBehavior({
     this.cooldown = 0.5,
@@ -45,6 +48,9 @@ class ShootingBehavior extends Behavior<Spaceship>
 
     // Add the bullet to the game world
     parent.parent?.add(bullet);
+
+    // Play shooting sound
+    game.effectPlayer.play(AssetSource(Assets.audio.spaceshipShoot));
 
     // Start cooldown
     _canShoot = false;
