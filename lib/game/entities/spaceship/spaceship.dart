@@ -10,6 +10,7 @@ enum SpaceshipState {
   idle,
   left,
   right,
+  broken,
 }
 
 /// {@template spaceship}
@@ -73,6 +74,12 @@ class Spaceship extends PositionedEntity with HasGameReference {
     if (!isDestroyed) {
       _health -= amount;
       if (_health < 0) _health = 0;
+
+      // If spaceship is now destroyed, show the broken animation
+      if (isDestroyed && _currentState != SpaceshipState.broken) {
+        _currentState = SpaceshipState.broken;
+        _updateAnimation();
+      }
     }
   }
 
@@ -124,6 +131,16 @@ class Spaceship extends PositionedEntity with HasGameReference {
         amount:
             4, // Update this if your right animation has a different number of frames
         stepTime: 0.1,
+        textureSize: Vector2(40, 56),
+      ),
+    );
+
+    // Load broken spaceship animation
+    _animations[SpaceshipState.broken] = SpriteAnimation.fromFrameData(
+      game.images.fromCache(Assets.images.spaceshipBroken.path),
+      SpriteAnimationData.sequenced(
+        amount: 2,
+        stepTime: 0.2,
         textureSize: Vector2(40, 56),
       ),
     );
