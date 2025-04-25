@@ -82,7 +82,7 @@ class DroneSpawner extends Component with HasGameReference<MissionLaunch> {
     // Generate a target position for the drone (where it will hover)
     // Try several times to find a position that doesn't overlap with existing drones
     Vector2? targetPosition;
-    int attempts = 0;
+    var attempts = 0;
 
     while (targetPosition == null && attempts < _maxPositionAttempts) {
       // Generate a random position within the upper part of the screen
@@ -93,7 +93,7 @@ class DroneSpawner extends Component with HasGameReference<MissionLaunch> {
       final potentialPosition = Vector2(potentialX, potentialY);
 
       // Check if this position is far enough from all existing drones
-      bool isValidPosition = true;
+      var isValidPosition = true;
       final existingDrones = game.children.whereType<Drone>().toList();
 
       for (final drone in existingDrones) {

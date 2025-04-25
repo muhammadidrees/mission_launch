@@ -51,9 +51,9 @@ class MissionLaunch extends FlameGame
         // Add the alien spawner
         // AlienSpawner(maxAliens: 4),
 
-        AsteroidSpawner(),
+        // AsteroidSpawner(),
 
-        // DroneSpawner(),
+        DroneSpawner(),
       ],
     );
 

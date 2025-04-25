@@ -12,6 +12,12 @@ import 'package:flutter/widgets.dart';
 class $AssetsAudioGen {
   const $AssetsAudioGen();
 
+  /// File path: assets/audio/alien-flying.mp3
+  String get alienFlying => 'assets/audio/alien-flying.mp3';
+
+  /// File path: assets/audio/alien-shoot.mp3
+  String get alienShoot => 'assets/audio/alien-shoot.mp3';
+
   /// File path: assets/audio/asteriod-explode.mp3
   String get asteriodExplode => 'assets/audio/asteriod-explode.mp3';
 
@@ -21,18 +27,36 @@ class $AssetsAudioGen {
   /// File path: assets/audio/background.mp3
   String get background => 'assets/audio/background.mp3';
 
+  /// File path: assets/audio/drone-flying.mp3
+  String get droneFlying => 'assets/audio/drone-flying.mp3';
+
+  /// File path: assets/audio/drone-shoot.mp3
+  String get droneShoot => 'assets/audio/drone-shoot.mp3';
+
   /// File path: assets/audio/effect.mp3
   String get effect => 'assets/audio/effect.mp3';
+
+  /// File path: assets/audio/enemy-explode.mp3
+  String get enemyExplode => 'assets/audio/enemy-explode.mp3';
+
+  /// File path: assets/audio/hit.wav
+  String get hit => 'assets/audio/hit.wav';
 
   /// File path: assets/audio/spaceship-shoot.mp3
   String get spaceshipShoot => 'assets/audio/spaceship-shoot.mp3';
 
   /// List of all assets
   List<String> get values => [
+    alienFlying,
+    alienShoot,
     asteriodExplode,
     asteriodHit,
     background,
+    droneFlying,
+    droneShoot,
     effect,
+    enemyExplode,
+    hit,
     spaceshipShoot,
   ];
 }

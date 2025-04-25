@@ -121,7 +121,7 @@ class Drone extends PositionedEntity with HasGameReference<MissionLaunch> {
       game.counter += 2; // More points than regular aliens
 
       // Play destruction sound
-      game.effectPlayer.play(AssetSource('audio/effect.mp3'));
+      game.effectPlayer.play(AssetSource(Assets.audio.enemyExplode));
 
       // Remove the original drone
       removeFromParent();
