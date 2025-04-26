@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mission_launch/l10n/l10n.dart';
 import 'package:mission_launch/loading/loading.dart';
 import 'package:mission_launch/title/title.dart';
+import 'package:nes_ui/nes_ui.dart';
 
 class LoadingPage extends StatefulWidget {
   const LoadingPage({super.key});
@@ -41,30 +42,14 @@ class _LoadingInternal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primaryTextTheme = Theme.of(context).primaryTextTheme;
-    final l10n = context.l10n;
-
     return BlocBuilder<PreloadCubit, PreloadState>(
       builder: (context, state) {
-        final loadingLabel = l10n.loadingPhaseLabel(state.currentLabel);
-        final loadingMessage = l10n.loading(loadingLabel);
-        return Column(
+        return const Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: AnimatedProgressBar(
-                progress: state.progress,
-                backgroundColor: const Color(0xFF2A48DF),
-                foregroundColor: const Color(0xFFFFFFFF),
-              ),
-            ),
-            Text(
-              loadingMessage,
-              style: primaryTextTheme.bodySmall!.copyWith(
-                color: const Color(0xFF2A48DF),
-                fontWeight: FontWeight.w900,
-              ),
+              padding: EdgeInsets.symmetric(vertical: 8),
+              child: NesHourglassLoadingIndicator(),
             ),
           ],
         );
