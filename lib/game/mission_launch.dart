@@ -30,7 +30,7 @@ class MissionLaunch extends FlameGame
   late Spaceship _spaceship;
 
   /// Reference to the game progression manager
-  late GameProgressionManager _progressionManager;
+  late GameProgressionManager progressionManager;
 
   @override
   bool get debugMode => false;
@@ -45,11 +45,15 @@ class MissionLaunch extends FlameGame
       position: Vector2(size.x / 2, size.y - 80),
     );
 
-    // Create the progression manager
-    _progressionManager = GameProgressionManager(
+    // Create the progression manager first, so it's available to all components
+    progressionManager = GameProgressionManager(
+      totalMissionDuration: 180, // 3 minutes total
       progressBarWidth: size.x * 0.6, // Make it 60% of screen width
       progressBarHeight: 18,
     );
+    
+    // Add progression manager to the game first so it's available to all components
+    await add(progressionManager);
 
     // Create the game world with all entities
     final world = World(
@@ -75,9 +79,7 @@ class MissionLaunch extends FlameGame
           position: Vector2(10, 10),
           heartSize: 24,
         ),
-      )
-      // Add the progression manager to show mission progress
-      ..add(_progressionManager);
+      );
 
     // Create and configure the game camera
     final camera = CameraComponent(
@@ -89,4 +91,22 @@ class MissionLaunch extends FlameGame
 
     camera.viewfinder.position = size / 2;
   }
+  
+  /// Get the current phase of the game
+  GamePhase get currentPhase => progressionManager.currentPhase;
+  
+  /// Get the progress as a percentage (0-100)
+  int get progressPercent => progressionManager.progressPercent;
+  
+  /// Get the name of the current phase
+  String get phaseName => progressionManager.phaseName;
+  
+  /// Get remaining time formatted as mm:ss
+  String get remainingTime => progressionManager.remainingTimeFormatted;
+  
+  /// Get elapsed time formatted as mm:ss
+  String get elapsedTime => progressionManager.elapsedTimeFormatted;
+  
+  /// Get the color associated with the current phase
+  Color get phaseColor => progressionManager.phaseColor;
 }

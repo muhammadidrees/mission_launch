@@ -32,6 +32,7 @@ class GameProgressionManager extends PositionComponent
     this.progressBarWidth = 200.0,
     this.progressBarHeight = 15.0,
     Vector2? position,
+    this.visibleOnUI = true,
   }) : _elapsedTime = 0 {
     this.position = position ?? Vector2.zero();
   }
@@ -44,6 +45,9 @@ class GameProgressionManager extends PositionComponent
 
   /// Height of the progress bar
   final double progressBarHeight;
+
+  /// Whether to display the progress bar on screen
+  final bool visibleOnUI;
 
   /// Current elapsed time in seconds
   double _elapsedTime;
@@ -63,6 +67,20 @@ class GameProgressionManager extends PositionComponent
   /// Get current phase
   GamePhase get currentPhase => _currentPhase;
 
+  /// Get current phase as a string
+  String get phaseName {
+    switch (_currentPhase) {
+      case GamePhase.earthOrbit:
+        return 'Earth Orbit';
+      case GamePhase.deepSpace:
+        return 'Deep Space';
+      case GamePhase.lunarApproach:
+        return 'Lunar Approach';
+      case GamePhase.missionComplete:
+        return 'Moon Reached!';
+    }
+  }
+
   /// Check if drones are enabled
   bool get dronesEnabled => _dronesEnabled;
 
@@ -75,11 +93,39 @@ class GameProgressionManager extends PositionComponent
   /// Get progress as a value between 0.0 and 1.0
   double get progress => _elapsedTime / totalMissionDuration;
 
+  /// Get progress as a percentage (0-100)
+  int get progressPercent => (progress * 100).round();
+
   /// Get remaining time in seconds
   double get remainingTime => totalMissionDuration - _elapsedTime;
 
+  /// Get remaining time formatted as mm:ss
+  String get remainingTimeFormatted {
+    final minutes = (remainingTime / 60).floor();
+    final seconds = (remainingTime % 60).floor();
+    return '$minutes:${seconds.toString().padLeft(2, '0')}';
+  }
+
   /// Get elapsed time in seconds
   double get elapsedTime => _elapsedTime;
+
+  /// Get elapsed time formatted as mm:ss
+  String get elapsedTimeFormatted {
+    final minutes = (elapsedTime / 60).floor();
+    final seconds = (elapsedTime % 60).floor();
+    return '$minutes:${seconds.toString().padLeft(2, '0')}';
+  }
+
+  /// Get phase time as a percentage (how far through current phase)
+  double get phaseProgress {
+    final phaseTime = totalMissionDuration / 3;
+    final phase = (_elapsedTime / phaseTime).floor();
+    final phaseStartTime = phase * phaseTime;
+    return (_elapsedTime - phaseStartTime) / phaseTime;
+  }
+
+  /// Get the color for the current phase
+  Color get phaseColor => _getProgressColor();
 
   @override
   void onLoad() {
@@ -91,6 +137,9 @@ class GameProgressionManager extends PositionComponent
       (game.size.x - progressBarWidth) / 2,
       20,
     );
+
+    // Make this component accessible to everyone who needs it
+    priority = 1000; // High priority to make sure it updates first
   }
 
   @override
@@ -110,6 +159,9 @@ class GameProgressionManager extends PositionComponent
   @override
   void render(Canvas canvas) {
     super.render(canvas);
+
+    // Only render if we're configured to be visible
+    if (!visibleOnUI) return;
 
     // Draw progress bar background
     final backgroundRect = Rect.fromLTWH(
@@ -241,5 +293,11 @@ class GameProgressionManager extends PositionComponent
       path,
       Paint()..color = Colors.white,
     );
+  }
+
+  // Method to manually set the time for testing
+  void setTime(double seconds) {
+    _elapsedTime = seconds.clamp(0, totalMissionDuration);
+    _updatePhase();
   }
 }
