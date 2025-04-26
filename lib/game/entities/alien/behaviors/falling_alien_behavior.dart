@@ -1,7 +1,6 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
-import 'package:flutter/material.dart';
 import 'package:mission_launch/audio/audio_manager.dart';
 import 'package:mission_launch/game/game.dart';
 import 'package:mission_launch/gen/assets.gen.dart';
@@ -86,31 +85,10 @@ class _SpaceshipCollisionBehavior
   void onCollisionStart(Set<Vector2> intersectionPoints, Spaceship other) {
     super.onCollisionStart(intersectionPoints, other);
 
-    if (other.isDestroyed) return;
+    if (other.isDestroyed || other.isInvincible) return;
 
     // Damage the spaceship
     other.damage(parent.alienType.damage);
-
-    // Flash the spaceship to red to indicate damage
-    final spaceshipComponent = other.firstChild<RectangleComponent>();
-    final originalColor = spaceshipComponent?.paint.color;
-
-    if (originalColor != null) {
-      spaceshipComponent?.paint.color = Colors.red;
-
-      // Reset color after a short delay
-      other.add(
-        TimerComponent(
-          period: 0.2,
-          removeOnFinish: true,
-          onTick: () {
-            if (!other.isDestroyed) {
-              spaceshipComponent?.paint.color = originalColor;
-            }
-          },
-        ),
-      );
-    }
 
     // Play collision sound
     AudioManager.instance.playHit();

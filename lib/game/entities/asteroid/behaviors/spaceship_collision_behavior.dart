@@ -1,6 +1,5 @@
 import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
-import 'package:flutter/material.dart';
 import 'package:mission_launch/audio/audio_manager.dart';
 import 'package:mission_launch/game/game.dart';
 
@@ -24,35 +23,15 @@ class SpaceshipCollisionBehavior extends CollisionBehavior<Spaceship, Asteroid>
   void onCollisionStart(Set<Vector2> intersectionPoints, Spaceship other) {
     super.onCollisionStart(intersectionPoints, other);
 
-    // Skip if we're in cooldown or if spaceship is already destroyed
-    if (_inCooldown || other.isDestroyed) return;
-
-    // Flash the spaceship to red to indicate damage
-    final spaceshipComponent = other.firstChild<RectangleComponent>();
-    final originalColor = spaceshipComponent?.paint.color;
-
-    if (originalColor != null) {
-      spaceshipComponent?.paint.color = Colors.red;
-
-      // Reset color after a short delay
-      other.add(
-        TimerComponent(
-          period: 0.2,
-          removeOnFinish: true,
-          onTick: () {
-            if (!other.isDestroyed) {
-              spaceshipComponent?.paint.color = originalColor;
-            }
-          },
-        ),
-      );
-    }
-
-    // Damage the spaceship
-    other.damage(parent.damage);
+    // Skip if we're in cooldown, if spaceship is already destroyed,
+    // or if spaceship is currently invincible
+    if (_inCooldown || other.isDestroyed || other.isInvincible) return;
 
     // Play collision sound
     AudioManager.instance.playAsteroidHit();
+
+    // Damage the spaceship (this also triggers invincibility and blinking)
+    other.damage(parent.damage);
 
     // Remove the asteroid
     parent.removeFromParent();

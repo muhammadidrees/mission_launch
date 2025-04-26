@@ -21,6 +21,7 @@ class Spaceship extends PositionedEntity with HasGameReference {
   Spaceship({
     required super.position,
     this.maxHealth = 3,
+    this.invincibilityDuration = 1.5,
   }) : super(
           anchor: Anchor.center,
           size: Vector2(40, 56),
@@ -44,12 +45,16 @@ class Spaceship extends PositionedEntity with HasGameReference {
     required super.position,
     super.behaviors,
     this.maxHealth = 3,
+    this.invincibilityDuration = 1.5,
   }) : super(size: Vector2(48, 32)) {
     _health = maxHealth;
   }
 
   /// The maximum health of the spaceship
   final int maxHealth;
+
+  /// Duration of invincibility after taking damage (in seconds)
+  final double invincibilityDuration;
 
   /// Current health of the spaceship
   int _health = 3;
@@ -63,24 +68,72 @@ class Spaceship extends PositionedEntity with HasGameReference {
   /// The sprite animation component for the spaceship
   SpriteAnimationComponent? _animationComponent;
 
+  /// Whether the spaceship is currently invincible
+  bool _isInvincible = false;
+
+  /// Timer to track the blinking effect
+  Timer? _blinkTimer;
+
   /// Get the current health
   int get health => _health;
 
   /// Check if the spaceship is destroyed (health <= 0)
   bool get isDestroyed => _health <= 0;
 
+  /// Check if the spaceship is currently invincible
+  bool get isInvincible => _isInvincible;
+
   /// Decreases the health by the given amount
   void damage([int amount = 1]) {
-    if (!isDestroyed) {
-      _health -= amount;
-      if (_health < 0) _health = 0;
+    // Don't take damage if invincible or already destroyed
+    if (_isInvincible || isDestroyed) return;
 
-      // If spaceship is now destroyed, show the broken animation
-      if (isDestroyed && _currentState != SpaceshipState.broken) {
-        _currentState = SpaceshipState.broken;
-        _updateAnimation();
-      }
+    _health -= amount;
+    if (_health < 0) _health = 0;
+
+    // If spaceship is now destroyed, show the broken animation
+    if (isDestroyed && _currentState != SpaceshipState.broken) {
+      _currentState = SpaceshipState.broken;
+      _updateAnimation();
+    } else {
+      // Activate invincibility and blinking effect
+      _activateInvincibility();
     }
+  }
+
+  /// Activates temporary invincibility and blinking effect
+  void _activateInvincibility() {
+    _isInvincible = true;
+
+    // Create blinking effect - toggle visibility every 0.15 seconds
+    _blinkTimer = Timer(
+      0.15,
+      onTick: () {
+        if (_animationComponent != null) {
+          _animationComponent!.opacity =
+              _animationComponent!.opacity > 0 ? 0 : 1;
+        }
+      },
+      repeat: true,
+    );
+
+    // Add a timer to end invincibility after the set duration
+    add(
+      TimerComponent(
+        period: invincibilityDuration,
+        removeOnFinish: true,
+        onTick: () {
+          // End invincibility
+          _isInvincible = false;
+
+          // Stop blinking and ensure spaceship is fully visible
+          _blinkTimer?.stop();
+          if (_animationComponent != null) {
+            _animationComponent!.opacity = 1;
+          }
+        },
+      ),
+    );
   }
 
   /// Resets the health to maxHealth
@@ -150,5 +203,13 @@ class Spaceship extends PositionedEntity with HasGameReference {
     );
 
     await add(_animationComponent!);
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+
+    // Update blink timer if active
+    _blinkTimer?.update(dt);
   }
 }

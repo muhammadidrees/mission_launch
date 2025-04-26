@@ -178,7 +178,7 @@ class SpaceshipCollisionBehavior
   void onCollisionStart(Set<Vector2> intersectionPoints, Spaceship other) {
     super.onCollisionStart(intersectionPoints, other);
 
-    if (other.isDestroyed) return;
+    if (other.isDestroyed || other.isInvincible) return;
 
     // Damage the spaceship
     other.damage(parent.damage);
