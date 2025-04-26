@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mission_launch/l10n/l10n.dart';
 import 'package:mission_launch/loading/loading.dart';
 import 'package:mission_launch/title/title.dart';
 import 'package:nes_ui/nes_ui.dart';
