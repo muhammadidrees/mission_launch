@@ -50,7 +50,10 @@ class ShootingBehavior extends Behavior<Spaceship>
     parent.parent?.add(bullet);
 
     // Play shooting sound
-    game.effectPlayer.play(AssetSource(Assets.audio.spaceshipShoot));
+    game.effectPlayer.play(
+      AssetSource(Assets.audio.spaceshipShoot),
+      volume: 0.6,
+    );
 
     // Start cooldown
     _canShoot = false;
