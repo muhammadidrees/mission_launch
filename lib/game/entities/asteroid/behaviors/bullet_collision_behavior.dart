@@ -24,6 +24,9 @@ class BulletCollisionBehavior extends CollisionBehavior<Bullet, Asteroid>
     // Damage the asteroid
     parent.takeDamage();
 
+    // Add a visual effect to indicate the asteroid was hit
+    parent.add(HitEffectComponent());
+
     // Add score only if asteroid is destroyed
     if (parent.isDestroyed) {
       game.counter++;

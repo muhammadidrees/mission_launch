@@ -44,5 +44,8 @@ class BulletCollisionBehavior extends CollisionBehavior<Bullet, Alien>
         },
       ),
     );
+
+    // Add a visual effect to indicate the alien was hit
+    parent.add(HitEffectComponent());
   }
 }

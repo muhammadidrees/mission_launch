@@ -23,5 +23,8 @@ class BulletCollisionBehavior extends CollisionBehavior<Bullet, Drone>
 
     // Play hit sound
     AudioManager.instance.playHit();
+
+    // Add a visual effect to indicate the drone was hit
+    parent.add(HitEffectComponent());
   }
 }
