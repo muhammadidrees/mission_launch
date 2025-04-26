@@ -64,6 +64,7 @@ class Alien extends PositionedEntity with HasGameReference<MissionLaunch> {
             AlienShootingBehavior(),
             BulletCollisionBehavior(),
             AsteroidCollisionBehavior(),
+            AlienAudioBehavior(),
           ],
         ) {
     // Set type or choose random
@@ -115,7 +116,7 @@ class Alien extends PositionedEntity with HasGameReference<MissionLaunch> {
       game.counter += 3; // More points than regular drones
 
       // Play destruction sound
-      game.effectPlayer.play(AssetSource('audio/effect.mp3'));
+      game.effectPlayer.play(AssetSource(Assets.audio.enemyExplode));
 
       // Remove the original alien
       removeFromParent();

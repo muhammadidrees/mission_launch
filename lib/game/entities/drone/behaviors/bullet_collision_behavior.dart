@@ -16,13 +16,13 @@ class BulletCollisionBehavior extends CollisionBehavior<Bullet, Drone>
   void onCollisionStart(Set<Vector2> intersectionPoints, Bullet other) {
     super.onCollisionStart(intersectionPoints, other);
 
-    // Play hit sound
-    game.effectPlayer.play(AssetSource(Assets.audio.hit));
+    // Damage the drone
+    parent.takeDamage();
 
     // Remove the bullet
     other.removeFromParent();
 
-    // Damage the drone
-    parent.takeDamage();
+    // Play hit sound
+    game.effectPlayer.play(AssetSource(Assets.audio.hit));
   }
 }

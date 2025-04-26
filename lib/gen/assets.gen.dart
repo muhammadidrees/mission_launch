@@ -21,8 +21,8 @@ class $AssetsAudioGen {
   /// File path: assets/audio/asteriod-explode.mp3
   String get asteriodExplode => 'assets/audio/asteriod-explode.mp3';
 
-  /// File path: assets/audio/asteriod-hit.mp3
-  String get asteriodHit => 'assets/audio/asteriod-hit.mp3';
+  /// File path: assets/audio/asteriod-hit.wav
+  String get asteriodHit => 'assets/audio/asteriod-hit.wav';
 
   /// File path: assets/audio/background.mp3
   String get background => 'assets/audio/background.mp3';
@@ -47,18 +47,18 @@ class $AssetsAudioGen {
 
   /// List of all assets
   List<String> get values => [
-    alienFlying,
-    alienShoot,
-    asteriodExplode,
-    asteriodHit,
-    background,
-    droneFlying,
-    droneShoot,
-    effect,
-    enemyExplode,
-    hit,
-    spaceshipShoot,
-  ];
+        alienFlying,
+        alienShoot,
+        asteriodExplode,
+        asteriodHit,
+        background,
+        droneFlying,
+        droneShoot,
+        effect,
+        enemyExplode,
+        hit,
+        spaceshipShoot,
+      ];
 }
 
 class $AssetsImagesGen {
@@ -115,20 +115,20 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
-    alienBroken,
-    alien,
-    asteroid1,
-    asteroid2,
-    asteroid3,
-    droneBroken,
-    drone,
-    explode,
-    spaceshipBroken,
-    spaceshipLeft,
-    spaceshipRight,
-    spaceshipIdle,
-    unicornAnimation,
-  ];
+        alienBroken,
+        alien,
+        asteroid1,
+        asteroid2,
+        asteroid3,
+        droneBroken,
+        drone,
+        explode,
+        spaceshipBroken,
+        spaceshipLeft,
+        spaceshipRight,
+        spaceshipIdle,
+        unicornAnimation,
+      ];
 }
 
 class $AssetsLicensesGen {

@@ -118,7 +118,7 @@ class _SpaceshipCollisionBehavior
     }
 
     // Play collision sound
-    game.effectPlayer.play(AssetSource('audio/effect.mp3'));
+    game.effectPlayer.play(AssetSource(Assets.audio.hit));
 
     // Remove the falling drone
     parent.removeFromParent();
