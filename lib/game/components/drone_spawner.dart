@@ -80,7 +80,8 @@ class DroneSpawner extends Component with HasGameReference<MissionLaunch> {
     final screenHeight = game.size.y;
 
     // Generate a target position for the drone (where it will hover)
-    // Try several times to find a position that doesn't overlap with existing drones
+    // Try several times to find a position that doesn't overlap
+    // with existing drones
     Vector2? targetPosition;
     var attempts = 0;
 
@@ -113,8 +114,10 @@ class DroneSpawner extends Component with HasGameReference<MissionLaunch> {
 
     // If we couldn't find a non-overlapping position after max attempts,
     // just use the last attempted position
-    targetPosition ??= Vector2(screenWidth * (0.1 + _random.nextDouble() * 0.8),
-        screenHeight * (0.1 + _random.nextDouble() * 0.4));
+    targetPosition ??= Vector2(
+      screenWidth * (0.1 + _random.nextDouble() * 0.8),
+      screenHeight * (0.1 + _random.nextDouble() * 0.4),
+    );
 
     // Choose a random edge of the screen to spawn from
     final side = _random.nextInt(3); // 0=top, 1=right, 2=left
@@ -122,10 +125,15 @@ class DroneSpawner extends Component with HasGameReference<MissionLaunch> {
 
     switch (side) {
       case 0: // top
-        spawnPosition = Vector2(_random.nextDouble() * screenWidth, -30);
+        spawnPosition = Vector2(
+          _random.nextDouble() * screenWidth,
+          -30,
+        );
       case 1: // right
         spawnPosition = Vector2(
-            screenWidth + 30, _random.nextDouble() * screenHeight * 0.5);
+          screenWidth + 30,
+          _random.nextDouble() * screenHeight * 0.5,
+        );
       case 2: // left
         spawnPosition = Vector2(-30, _random.nextDouble() * screenHeight * 0.5);
     }

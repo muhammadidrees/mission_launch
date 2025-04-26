@@ -1,8 +1,8 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
 import 'package:flutter/material.dart';
+import 'package:mission_launch/audio/audio_manager.dart';
 import 'package:mission_launch/game/game.dart';
 import 'package:mission_launch/gen/assets.gen.dart';
 
@@ -113,7 +113,7 @@ class _SpaceshipCollisionBehavior
     }
 
     // Play collision sound
-    game.effectPlayer.play(AssetSource('audio/effect.mp3'));
+    AudioManager.instance.playHit();
 
     // Remove the falling alien
     parent.removeFromParent();

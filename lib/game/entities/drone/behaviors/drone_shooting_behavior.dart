@@ -1,13 +1,12 @@
 import 'dart:math';
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
 import 'package:flutter/material.dart';
+import 'package:mission_launch/audio/audio_manager.dart';
 import 'package:mission_launch/game/entities/drone/behaviors/drone_moving_behavior.dart';
 import 'package:mission_launch/game/game.dart';
-import 'package:mission_launch/gen/assets.gen.dart';
 
 /// {@template drone_shooting_behavior}
 /// A behavior that makes the drone shoot bullets periodically.
@@ -85,7 +84,7 @@ class DroneShootingBehavior extends Behavior<Drone>
     parent.parent?.add(rightBullet);
 
     // Play sound effect
-    game.effectPlayer.play(AssetSource(Assets.audio.droneShoot));
+    AudioManager.instance.playDroneShoot();
   }
 }
 
@@ -172,7 +171,7 @@ class SpaceshipCollisionBehavior
     other.damage(parent.damage);
 
     // Play collision sound
-    game.effectPlayer.play(AssetSource('audio/effect.mp3'));
+    AudioManager.instance.playHit();
 
     // Remove the bullet
     parent.removeFromParent();

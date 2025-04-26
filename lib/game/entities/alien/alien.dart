@@ -1,10 +1,10 @@
 import 'dart:developer' as dev;
 import 'dart:math';
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
+import 'package:mission_launch/audio/audio_manager.dart';
 import 'package:mission_launch/game/entities/alien/behaviors/behaviors.dart';
 import 'package:mission_launch/game/game.dart';
 import 'package:mission_launch/gen/assets.gen.dart';
@@ -123,13 +123,7 @@ class Alien extends PositionedEntity with HasGameReference<MissionLaunch> {
       // Play explosion sound - ensure it plays before removal
       try {
         // Play with higher volume and ensure it starts
-        game.effectPlayer
-          ..setVolume(1)
-          ..play(
-            AssetSource(Assets.audio.enemyExplode),
-            mode: PlayerMode.lowLatency,
-            volume: 1,
-          );
+        AudioManager.instance.playEnemyExplode();
 
         dev.log('Explosion sound should be playing');
       } catch (e) {

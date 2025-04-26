@@ -82,7 +82,7 @@ class AlienSpawner extends Component with HasGameReference<MissionLaunch> {
     // Calculate a good target central position for the alien
     // This is where the alien will hover after flying in
     Vector2? centralPosition;
-    int attempts = 0;
+    var attempts = 0;
 
     while (centralPosition == null && attempts < _maxPositionAttempts) {
       // Calculate a position in the upper area of the screen
@@ -93,8 +93,9 @@ class AlienSpawner extends Component with HasGameReference<MissionLaunch> {
 
       final potentialPosition = Vector2(potentialX, potentialY);
 
-      // Check if this position is far enough from all existing aliens and drones
-      bool isValidPosition = true;
+      // Check if this position is far enough from all existing
+      // aliens and drones
+      var isValidPosition = true;
 
       // Check distance from other aliens
       final existingAliens = game.children.whereType<Alien>().toList();
@@ -125,10 +126,12 @@ class AlienSpawner extends Component with HasGameReference<MissionLaunch> {
       attempts++;
     }
 
-    // If we couldn't find a non-overlapping position, use the last attempted position
+    // If we couldn't find a non-overlapping position, use the
+    // last attempted position
     centralPosition ??= Vector2(
-        screenWidth * (0.3 + _random.nextDouble() * 0.4),
-        screenHeight * (0.15 + _random.nextDouble() * 0.25));
+      screenWidth * (0.3 + _random.nextDouble() * 0.4),
+      screenHeight * (0.15 + _random.nextDouble() * 0.25),
+    );
 
     // Choose a random side of the screen to spawn from (left or right)
     final spawnFromLeft = _random.nextBool();

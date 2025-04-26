@@ -1,6 +1,6 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
+import 'package:mission_launch/audio/audio_manager.dart';
 import 'package:mission_launch/game/entities/asteroid/behaviors/asteroid_moving_behavior.dart';
 import 'package:mission_launch/game/game.dart';
 
@@ -32,6 +32,6 @@ class AsteroidCollisionBehavior extends CollisionBehavior<Asteroid, Drone>
     other.takeDamage();
 
     // Play collision sound
-    game.effectPlayer.play(AssetSource('audio/effect.mp3'));
+    AudioManager.instance.playAsteroidHit();
   }
 }

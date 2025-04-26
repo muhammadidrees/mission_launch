@@ -1,12 +1,11 @@
 import 'dart:math';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
 import 'package:flutter/material.dart';
+import 'package:mission_launch/audio/audio_manager.dart';
 import 'package:mission_launch/game/entities/alien/behaviors/alien_moving_behavior.dart';
 import 'package:mission_launch/game/game.dart';
-import 'package:mission_launch/gen/assets.gen.dart';
 
 /// {@template alien_shooting_behavior}
 /// A behavior that makes the alien shoot bullets when moving.
@@ -98,7 +97,7 @@ class AlienShootingBehavior extends Behavior<Alien>
     parent.parent?.add(bullet);
 
     // Play alien shooting sound effect
-    game.effectPlayer.play(AssetSource(Assets.audio.alienShoot));
+    AudioManager.instance.playAlienShoot();
   }
 }
 
@@ -185,7 +184,7 @@ class SpaceshipCollisionBehavior
     other.damage(parent.damage);
 
     // Play hit sound
-    game.effectPlayer.play(AssetSource(Assets.audio.hit));
+    AudioManager.instance.playHit();
 
     // Remove the bullet
     parent.removeFromParent();

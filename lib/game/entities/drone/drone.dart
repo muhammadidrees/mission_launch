@@ -1,8 +1,8 @@
 import 'dart:math';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
+import 'package:mission_launch/audio/audio_manager.dart';
 import 'package:mission_launch/game/entities/drone/behaviors/behaviors.dart';
 import 'package:mission_launch/game/game.dart';
 import 'package:mission_launch/gen/assets.gen.dart';
@@ -44,7 +44,8 @@ enum DroneType {
 }
 
 /// {@template drone}
-/// An enemy drone that flies in from an edge, hovers in place, and shoots bullets.
+/// An enemy drone that flies in from an edge, hovers in place,
+///  and shoots bullets.
 /// {@endtemplate}
 class Drone extends PositionedEntity with HasGameReference<MissionLaunch> {
   /// {@macro drone}
@@ -73,10 +74,12 @@ class Drone extends PositionedEntity with HasGameReference<MissionLaunch> {
     size = Vector2(56, 48) * _type.size;
 
     // Add movement behavior (fly in, then hover)
-    add(DroneMovingBehavior(
-      targetPosition: targetPosition,
-      flyInSpeed: _type.flyInSpeed,
-    ));
+    add(
+      DroneMovingBehavior(
+        targetPosition: targetPosition,
+        flyInSpeed: _type.flyInSpeed,
+      ),
+    );
 
     // Add audio behavior for drone flying sound with spatial effects
     add(DroneAudioBehavior());
@@ -123,8 +126,7 @@ class Drone extends PositionedEntity with HasGameReference<MissionLaunch> {
       // Add score
       game.counter += 2; // More points than regular aliens
 
-      // Play destruction sound
-      game.effectPlayer.play(AssetSource(Assets.audio.enemyExplode));
+      AudioManager.instance.playEnemyExplode();
 
       // Remove the original drone
       removeFromParent();

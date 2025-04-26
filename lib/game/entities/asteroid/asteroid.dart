@@ -1,11 +1,11 @@
 import 'dart:math';
 import 'dart:ui' as ui;
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
 import 'package:flutter/material.dart';
+import 'package:mission_launch/audio/audio_manager.dart';
 import 'package:mission_launch/game/entities/asteroid/behaviors/behaviors.dart';
 import 'package:mission_launch/game/game.dart';
 import 'package:mission_launch/gen/assets.gen.dart';
@@ -195,7 +195,7 @@ class Asteroid extends PositionedEntity with HasGameReference<MissionLaunch> {
     game.add(explosion);
 
     // Play explosion sound
-    game.effectPlayer.play(AssetSource(Assets.audio.asteriodExplode));
+    AudioManager.instance.playAsteroidExplode();
 
     // Remove the asteroid
     removeFromParent();

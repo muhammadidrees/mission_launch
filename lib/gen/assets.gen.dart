@@ -22,7 +22,7 @@ class $AssetsAudioGen {
   String get asteriodExplode => 'assets/audio/asteriod-explode.mp3';
 
   /// File path: assets/audio/asteriod-hit.wav
-  String get asteriodHit => 'assets/audio/asteriod-hit.wav';
+  String get asteriodHit => 'assets/audio/asteriod-hit.mp3';
 
   /// File path: assets/audio/background.mp3
   String get background => 'assets/audio/background.mp3';

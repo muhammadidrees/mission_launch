@@ -3,6 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flame/cache.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mission_launch/audio/audio_manager.dart';
 import 'package:mission_launch/gen/assets.gen.dart';
 
 part 'preload_state.dart';
@@ -16,6 +17,10 @@ class PreloadCubit extends Cubit<PreloadState> {
   /// Load items sequentially allows display of what is being loaded
   Future<void> loadSequentially() async {
     final phases = [
+      PreloadPhase(
+        'manager',
+        () => AudioManager.instance.preloadAssets(),
+      ),
       PreloadPhase(
         'audio',
         () => audio.loadAll([
@@ -51,6 +56,8 @@ class PreloadCubit extends Cubit<PreloadState> {
         ]),
       ),
     ];
+
+    await AudioManager.instance.initialize();
 
     emit(state.copyWith(totalCount: phases.length));
     for (final phase in phases) {
