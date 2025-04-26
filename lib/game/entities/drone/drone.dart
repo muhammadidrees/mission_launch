@@ -78,6 +78,9 @@ class Drone extends PositionedEntity with HasGameReference<MissionLaunch> {
       flyInSpeed: _type.flyInSpeed,
     ));
 
+    // Add audio behavior for drone flying sound with spatial effects
+    add(DroneAudioBehavior());
+
     // Add shooting behavior
     // Only shoot when in hovering state to avoid shooting while flying in
     add(DroneShootingBehavior());
