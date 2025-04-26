@@ -41,6 +41,9 @@ class AsteroidSpawner extends Component with HasGameReference<MissionLaunch> {
   /// Timer to track when to spawn next asteroid
   double _timer = 0;
 
+  /// Cached reference to the game progression manager
+  GameProgressionManager? _progressionManager;
+
   @override
   void onMount() {
     super.onMount();
@@ -49,6 +52,15 @@ class AsteroidSpawner extends Component with HasGameReference<MissionLaunch> {
 
   @override
   void update(double dt) {
+    // Find progression manager if we haven't cached it yet
+    _progressionManager ??=
+        game.children.whereType<GameProgressionManager>().firstOrNull;
+
+    // Don't spawn asteroids if progression manager says they're disabled
+    if (_progressionManager != null && !_progressionManager!.asteroidsEnabled) {
+      return;
+    }
+
     _timer += dt;
 
     final currentAsteroids = game.children.whereType<Asteroid>().length;

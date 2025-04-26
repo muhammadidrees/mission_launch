@@ -48,6 +48,9 @@ class AlienSpawner extends Component with HasGameReference<MissionLaunch> {
   /// Maximum number of attempts to find a valid non-overlapping position
   static const int _maxPositionAttempts = 10;
 
+  /// Cached reference to the game progression manager
+  GameProgressionManager? _progressionManager;
+
   @override
   void onMount() {
     super.onMount();
@@ -56,6 +59,15 @@ class AlienSpawner extends Component with HasGameReference<MissionLaunch> {
 
   @override
   void update(double dt) {
+    // Find progression manager if we haven't cached it yet
+    _progressionManager ??=
+        game.children.whereType<GameProgressionManager>().firstOrNull;
+
+    // Don't spawn aliens if progression manager says they're disabled
+    if (_progressionManager != null && !_progressionManager!.aliensEnabled) {
+      return;
+    }
+
     _timer += dt;
 
     final currentAliens = game.children.whereType<Alien>().length;

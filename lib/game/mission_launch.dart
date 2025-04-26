@@ -29,6 +29,9 @@ class MissionLaunch extends FlameGame
   /// Reference to the player's spaceship
   late Spaceship _spaceship;
 
+  /// Reference to the game progression manager
+  late GameProgressionManager _progressionManager;
+
   @override
   bool get debugMode => false;
 
@@ -40,6 +43,12 @@ class MissionLaunch extends FlameGame
     // Create the player spaceship
     _spaceship = Spaceship(
       position: Vector2(size.x / 2, size.y - 80),
+    );
+
+    // Create the progression manager
+    _progressionManager = GameProgressionManager(
+      progressBarWidth: size.x * 0.6, // Make it 60% of screen width
+      progressBarHeight: 18,
     );
 
     // Create the game world with all entities
@@ -59,7 +68,6 @@ class MissionLaunch extends FlameGame
 
     // Create a UI component for displaying health and other UI elements
     final uiComponent = PositionComponent()
-
       // Add health display to the UI
       ..add(
         HealthDisplayComponent(
@@ -67,7 +75,9 @@ class MissionLaunch extends FlameGame
           position: Vector2(10, 10),
           heartSize: 24,
         ),
-      );
+      )
+      // Add the progression manager to show mission progress
+      ..add(_progressionManager);
 
     // Create and configure the game camera
     final camera = CameraComponent(
