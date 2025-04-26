@@ -1,3 +1,5 @@
+// ignore_for_file: unawaited_futures
+
 import 'dart:async';
 
 import 'package:flame_audio/flame_audio.dart';
@@ -71,44 +73,52 @@ class AudioManager {
     _asteroidHitPool = await AudioPool.create(
       source: AssetSource(Assets.audio.asteriodHit.replaceAll('assets/', '')),
       maxPlayers: 6,
-    );
+    )
+      ..start(volume: 0);
 
     _asteroidExplodePool = await AudioPool.create(
       source:
           AssetSource(Assets.audio.asteriodExplode.replaceAll('assets/', '')),
       maxPlayers: 4,
-    );
+    )
+      ..start(volume: 0);
 
     _spaceshipShootPool = await AudioPool.create(
       source:
           AssetSource(Assets.audio.spaceshipShoot.replaceAll('assets/', '')),
       maxPlayers: 8,
-    );
+    )
+      ..start(volume: 0);
 
     _enemyExplodePool = await AudioPool.create(
       source: AssetSource(Assets.audio.enemyExplode.replaceAll('assets/', '')),
       maxPlayers: 6,
-    );
+    )
+      ..start(volume: 0);
 
     _alienShootPool = await AudioPool.create(
       source: AssetSource(Assets.audio.alienShoot.replaceAll('assets/', '')),
       maxPlayers: 10,
-    );
+    )
+      ..start(volume: 0);
 
     _hitPool = await AudioPool.create(
       source: AssetSource(Assets.audio.hit.replaceAll('assets/', '')),
       maxPlayers: 8,
-    );
+    )
+      ..start(volume: 0);
 
     _dronePool = await AudioPool.create(
       source: AssetSource(Assets.audio.droneFlying.replaceAll('assets/', '')),
       maxPlayers: 4,
-    );
+    )
+      ..start(volume: 0);
 
     _droneShootPool = await AudioPool.create(
       source: AssetSource(Assets.audio.droneShoot.replaceAll('assets/', '')),
       maxPlayers: 4,
-    );
+    )
+      ..start(volume: 0);
 
     // Pre-cache other audio files
     await FlameAudio.audioCache.loadAll([
