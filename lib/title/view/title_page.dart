@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mission_launch/game/game.dart';
-import 'package:mission_launch/l10n/l10n.dart';
+import 'package:nes_ui/nes_ui.dart';
 
 class TitlePage extends StatelessWidget {
   const TitlePage({super.key});
@@ -13,13 +13,8 @@ class TitlePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.titleAppBarTitle),
-      ),
-      body: const SafeArea(child: TitleView()),
+    return const Scaffold(
+      body: SafeArea(child: TitleView()),
     );
   }
 }
@@ -29,18 +24,29 @@ class TitleView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-
     return Center(
-      child: SizedBox(
-        width: 250,
-        height: 64,
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).pushReplacement<void, void>(GamePage.route());
-          },
-          child: Center(child: Text(l10n.titleButtonStart)),
-        ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Mission Launch',
+            style: TextTheme.of(context).displayLarge,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Space race to the moon',
+            style: TextTheme.of(context).headlineSmall,
+          ),
+          const SizedBox(height: 56),
+          NesButton.text(
+            type: NesButtonType.normal,
+            onPressed: () {
+              Navigator.of(context)
+                  .pushReplacement<void, void>(GamePage.route());
+            },
+            text: 'Start Game',
+          ),
+        ],
       ),
     );
   }
