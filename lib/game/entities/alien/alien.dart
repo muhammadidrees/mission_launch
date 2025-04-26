@@ -1,4 +1,6 @@
+import 'dart:developer' as dev;
 import 'dart:math';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -99,6 +101,9 @@ class Alien extends PositionedEntity with HasGameReference<MissionLaunch> {
 
     // If health reaches 0, create falling alien and remove this one
     if (_health <= 0) {
+      // Print debug info
+      dev.log('Alien destroyed - playing explosion sound');
+
       // Create a falling alien at this position
       // using the broken alien animation
       final fallingAlien = FallingAlien(
@@ -115,11 +120,30 @@ class Alien extends PositionedEntity with HasGameReference<MissionLaunch> {
       // Add score
       game.counter += 3; // More points than regular drones
 
-      // Play destruction sound
-      game.effectPlayer.play(AssetSource(Assets.audio.enemyExplode));
+      // Play explosion sound - ensure it plays before removal
+      try {
+        // Play with higher volume and ensure it starts
+        game.effectPlayer
+          ..setVolume(1)
+          ..play(
+            AssetSource(Assets.audio.enemyExplode),
+            mode: PlayerMode.lowLatency,
+            volume: 1,
+          );
 
-      // Remove the original alien
-      removeFromParent();
+        dev.log('Explosion sound should be playing');
+      } catch (e) {
+        dev.log('Error playing alien explosion sound: $e');
+      }
+
+      // Add a slight delay before removing to ensure sound starts playing
+      parent?.add(
+        TimerComponent(
+          period: 0.1,
+          removeOnFinish: true,
+          onTick: removeFromParent,
+        ),
+      );
     }
   }
 
