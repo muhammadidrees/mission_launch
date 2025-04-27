@@ -5,3 +5,4 @@ export 'drone_spawner.dart';
 export 'game_progression_manager.dart';
 export 'health_display.dart';
 export 'hit_effect_component.dart';
+export 'parallax_background.dart';

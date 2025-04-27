@@ -81,7 +81,10 @@ class Spaceship extends PositionedEntity
   Timer? _blinkTimer;
 
   /// Get the current health
-  int get health => bloc.state.rocketHealth;
+  int get health {
+    if (!isMounted) return _health;
+    return bloc.state.rocketHealth;
+  }
 
   /// Check if the spaceship is destroyed (health <= 0)
   bool get isDestroyed => health <= 0;

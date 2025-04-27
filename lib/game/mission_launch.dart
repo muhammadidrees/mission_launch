@@ -61,6 +61,12 @@ class MissionLaunch extends FlameGame
     // available to all components
     await add(progressionManager);
 
+    await add(
+      // Add the parallax background as the first
+      // element so it appears behind everything else
+      ParallaxBackgroundComponent(baseVelocity: 10),
+    );
+
     // Create the game world with all entities
     final world = World(
       children: [
