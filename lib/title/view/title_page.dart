@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mission_launch/game/game.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mission_launch/boss_office/boss_office.dart';
+import 'package:mission_launch/rocket_workshop/rocket_workshop.dart';
 import 'package:nes_ui/nes_ui.dart';
 
 class TitlePage extends StatelessWidget {
@@ -40,8 +42,22 @@ class TitleView extends StatelessWidget {
           const SizedBox(height: 56),
           NesButton.text(
             type: NesButtonType.normal,
-            onPressed: () {
-              Navigator.of(context).push(GamePage.route());
+            onPressed: () async {
+              // Navigator.of(context).push(GamePage.route());
+              final name = await NesInputDialog.show(
+                context: context,
+                message: 'Please enter your name:',
+              );
+
+              if (name == null || name.isEmpty) {
+                return;
+              }
+
+              if (!context.mounted) return;
+
+              context.read<RocketWorkshopCubit>().setPlayerName(name);
+
+              await Navigator.of(context).push(BossOfficePage.route());
             },
             text: 'Start Game',
           ),

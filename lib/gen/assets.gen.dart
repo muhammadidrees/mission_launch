@@ -99,6 +99,14 @@ class $AssetsImagesGen {
   AssetGenImage get background3 =>
       const AssetGenImage('assets/images/background-3.png');
 
+  /// File path: assets/images/bad-news.png
+  AssetGenImage get badNews =>
+      const AssetGenImage('assets/images/bad-news.png');
+
+  /// File path: assets/images/boss-office.png
+  AssetGenImage get bossOffice =>
+      const AssetGenImage('assets/images/boss-office.png');
+
   /// File path: assets/images/drone-broken.png
   AssetGenImage get droneBroken =>
       const AssetGenImage('assets/images/drone-broken.png');
@@ -108,6 +116,14 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/explode.png
   AssetGenImage get explode => const AssetGenImage('assets/images/explode.png');
+
+  /// File path: assets/images/rocket-launch.png
+  AssetGenImage get rocketLaunch =>
+      const AssetGenImage('assets/images/rocket-launch.png');
+
+  /// File path: assets/images/rocket-workshop.png
+  AssetGenImage get rocketWorkshop =>
+      const AssetGenImage('assets/images/rocket-workshop.png');
 
   /// File path: assets/images/spaceship-broken.png
   AssetGenImage get spaceshipBroken =>
@@ -140,9 +156,13 @@ class $AssetsImagesGen {
     background1,
     background2,
     background3,
+    badNews,
+    bossOffice,
     droneBroken,
     drone,
     explode,
+    rocketLaunch,
+    rocketWorkshop,
     spaceshipBroken,
     spaceshipLeft,
     spaceshipRight,

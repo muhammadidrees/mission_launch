@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mission_launch/l10n/l10n.dart';
 import 'package:mission_launch/loading/loading.dart';
+import 'package:mission_launch/rocket_workshop/cubit/rocket_workshop_cubit.dart';
 import 'package:nes_ui/nes_ui.dart';
 
 class App extends StatelessWidget {
@@ -18,6 +19,9 @@ class App extends StatelessWidget {
             Images(prefix: ''),
             AudioCache(prefix: ''),
           )..loadSequentially(),
+        ),
+        BlocProvider(
+          create: (_) => RocketWorkshopCubit(),
         ),
       ],
       child: const AppView(),
