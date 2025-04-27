@@ -63,10 +63,12 @@ class MissionLaunch extends FlameGame
 
     // Add progression manager to the game first so it's
     // available to all components
-    await add(FlameBlocProvider<GameBloc, GameState>.value(
-      value: gameBloc,
-      children: [progressionManager],
-    ));
+    await add(
+      FlameBlocProvider<GameBloc, GameState>.value(
+        value: gameBloc,
+        children: [progressionManager],
+      ),
+    );
 
     // Load and add image component
     await add(BackgroundComponent());
@@ -108,7 +110,12 @@ class MissionLaunch extends FlameGame
     await addAll([
       FlameBlocProvider<GameBloc, GameState>.value(
         value: gameBloc,
-        children: [world],
+        children: [
+          world,
+          // Add the success animation controller
+          // that will handle the success sequence
+          SuccessAnimationController(),
+        ],
       ),
       camera,
       uiComponent,

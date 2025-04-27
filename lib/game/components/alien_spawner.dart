@@ -160,9 +160,14 @@ class AlienSpawner extends Component
         : AlienType.small;
 
     // Create and add the alien
-    final alien = Alien(
-      position: position,
-      type: alienType,
+    final alien = FlameBlocProvider<GameBloc, GameState>.value(
+      value: bloc,
+      children: [
+        Alien(
+          position: position,
+          type: alienType,
+        ),
+      ],
     );
 
     game.add(alien);

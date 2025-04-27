@@ -144,8 +144,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   }
 
   void _onMissionCompleted(MissionCompleted event, Emitter<GameState> emit) {
-    // Set the mission complete flag
-    emit(state.copyWith(missionComplete: true));
+    // Set the mission complete flag and activate the success animation
+    emit(
+      state.copyWith(
+        missionComplete: true,
+        successAnimationActive: true,
+      ),
+    );
   }
 
   /// Determine the current game phase based on elapsed time

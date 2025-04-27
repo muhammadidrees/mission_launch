@@ -231,7 +231,7 @@ class AudioManager {
   Future<void> playEffect() async {
     if (!_soundEnabled) return;
     await _effectPlayer.stop();
-    await _effectPlayer.setVolume(_soundVolume);
+    await _effectPlayer.setVolume(_soundVolume * 1.2);
     await _effectPlayer.setSource(AssetSource(Assets.audio.effect));
     await _effectPlayer.resume();
   }

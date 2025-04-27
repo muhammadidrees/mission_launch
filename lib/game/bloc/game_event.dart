@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:mission_launch/game/bloc/bloc.dart';
 import 'package:mission_launch/game/config/game_config.dart';
-import 'package:mission_launch/game/game.dart';
 
 /// {@template game_event}
 /// Base class for all game events.

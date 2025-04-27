@@ -1,6 +1,8 @@
 import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
+import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flutter/services.dart';
+import 'package:mission_launch/game/bloc/bloc.dart';
 import 'package:mission_launch/game/game.dart';
 
 /// {@template keyboard_moving_behavior}
@@ -8,7 +10,10 @@ import 'package:mission_launch/game/game.dart';
 /// based on keyboard input.
 /// {@endtemplate}
 class KeyboardMovingBehavior extends Behavior<Spaceship>
-    with KeyboardHandler, HasGameReference<MissionLaunch> {
+    with
+        KeyboardHandler,
+        HasGameReference<MissionLaunch>,
+        FlameBlocReader<GameBloc, GameState> {
   /// {@macro keyboard_moving_behavior}
   KeyboardMovingBehavior({
     this.speed = 200,
@@ -84,9 +89,11 @@ class KeyboardMovingBehavior extends Behavior<Spaceship>
     );
 
     // Clamp vertical position to the bottom half of the screen
-    parent.position.y = parent.position.y.clamp(
-      game.size.y / 2, // Limit to the lower half of the screen
-      game.size.y - parent.size.y / 2, // Bottom boundary
-    );
+    parent.position.y = (bloc.state.missionComplete)
+        ? parent.position.y
+        : parent.position.y.clamp(
+            game.size.y / 2, // Limit to the lower half of the screen
+            game.size.y - parent.size.y / 2, // Bottom boundary
+          );
   }
 }

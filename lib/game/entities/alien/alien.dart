@@ -4,7 +4,9 @@ import 'dart:math';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
+import 'package:flame_bloc/flame_bloc.dart';
 import 'package:mission_launch/audio/audio_manager.dart';
+import 'package:mission_launch/game/bloc/bloc.dart';
 import 'package:mission_launch/game/entities/alien/behaviors/behaviors.dart';
 import 'package:mission_launch/game/game.dart';
 import 'package:mission_launch/gen/assets.gen.dart';
@@ -48,7 +50,10 @@ enum AlienType {
 /// {@template alien}
 /// An enemy alien that moves across the screen and shoots bullets.
 /// {@endtemplate}
-class Alien extends PositionedEntity with HasGameReference<MissionLaunch> {
+class Alien extends PositionedEntity
+    with
+        HasGameReference<MissionLaunch>,
+        FlameBlocListenable<GameBloc, GameState> {
   /// {@macro alien}
   Alien({
     required super.position,
@@ -138,6 +143,20 @@ class Alien extends PositionedEntity with HasGameReference<MissionLaunch> {
           onTick: removeFromParent,
         ),
       );
+    }
+  }
+
+  @override
+  void onNewState(GameState state) {
+    super.onNewState(state);
+
+    if (state.isGameOver) {
+      // Remove the drone when the game is over
+      removeFromParent();
+    }
+    if (state.missionComplete) {
+      // Remove the drone when the mission is complete
+      takeDamage(100);
     }
   }
 

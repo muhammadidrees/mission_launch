@@ -4,8 +4,11 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
+import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:mission_launch/audio/audio_manager.dart';
+import 'package:mission_launch/game/bloc/bloc.dart';
+import 'package:mission_launch/game/bloc/game_bloc.dart';
 import 'package:mission_launch/game/entities/asteroid/behaviors/behaviors.dart';
 import 'package:mission_launch/game/game.dart';
 import 'package:mission_launch/gen/assets.gen.dart';
@@ -59,7 +62,10 @@ enum AsteroidType {
 /// An asteroid that floats across the screen and can collide
 /// with spaceships and bullets.
 /// {@endtemplate}
-class Asteroid extends PositionedEntity with HasGameReference<MissionLaunch> {
+class Asteroid extends PositionedEntity
+    with
+        HasGameReference<MissionLaunch>,
+        FlameBlocListenable<GameBloc, GameState> {
   /// {@macro asteroid}
   Asteroid({
     required super.position,
@@ -144,6 +150,20 @@ class Asteroid extends PositionedEntity with HasGameReference<MissionLaunch> {
     // Show explosion animation and remove if health reaches 0
     if (_health <= 0) {
       _explode();
+    }
+  }
+
+  @override
+  void onNewState(GameState state) {
+    super.onNewState(state);
+
+    if (state.isGameOver) {
+      // Remove the drone when the game is over
+      removeFromParent();
+    }
+    if (state.missionComplete) {
+      // Remove the drone when the mission is complete
+      takeDamage(100);
     }
   }
 

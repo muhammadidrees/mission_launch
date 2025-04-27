@@ -2,7 +2,9 @@ import 'dart:math';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
+import 'package:flame_bloc/flame_bloc.dart';
 import 'package:mission_launch/audio/audio_manager.dart';
+import 'package:mission_launch/game/bloc/bloc.dart';
 import 'package:mission_launch/game/entities/drone/behaviors/behaviors.dart';
 import 'package:mission_launch/game/game.dart';
 import 'package:mission_launch/gen/assets.gen.dart';
@@ -47,7 +49,10 @@ enum DroneType {
 /// An enemy drone that flies in from an edge, hovers in place,
 ///  and shoots bullets.
 /// {@endtemplate}
-class Drone extends PositionedEntity with HasGameReference<MissionLaunch> {
+class Drone extends PositionedEntity
+    with
+        HasGameReference<MissionLaunch>,
+        FlameBlocListenable<GameBloc, GameState> {
   /// {@macro drone}
   Drone({
     required super.position,
@@ -130,6 +135,20 @@ class Drone extends PositionedEntity with HasGameReference<MissionLaunch> {
 
       // Remove the original drone
       removeFromParent();
+    }
+  }
+
+  @override
+  void onNewState(GameState state) {
+    super.onNewState(state);
+
+    if (state.isGameOver) {
+      // Remove the drone when the game is over
+      removeFromParent();
+    }
+    if (state.missionComplete) {
+      // Remove the drone when the mission is complete
+      takeDamage(100);
     }
   }
 

@@ -19,10 +19,7 @@ enum SpaceshipState {
 /// A spaceship that can be controlled with left/right arrow keys.
 /// {@endtemplate}
 class Spaceship extends PositionedEntity
-    with
-        HasGameReference,
-        FlameBlocReader<GameBloc, GameState>,
-        FlameBlocListenable<GameBloc, GameState> {
+    with HasGameReference, FlameBlocListenable<GameBloc, GameState> {
   /// {@macro spaceship}
   Spaceship({
     required super.position,
@@ -116,8 +113,14 @@ class Spaceship extends PositionedEntity
     if (state.isGameOver) {
       _currentState = SpaceshipState.broken;
       _updateAnimation();
-
       game.overlays.add('game_over');
+    }
+
+    if (state.missionComplete) {
+      _currentState = SpaceshipState.idle;
+      _updateAnimation();
+
+      _activateInvincibility();
     }
   }
 
@@ -230,6 +233,17 @@ class Spaceship extends PositionedEntity
     super.update(dt);
 
     bloc.add(GameTick(deltaTime: dt));
+
+    if (bloc.state.missionComplete) {
+      position.y -= 600 * dt;
+      if (position.y < -size.y) {
+        game.overlays.add('success');
+      }
+    }
+
+    if (position.y > game.size.y + 10) {
+      removeFromParent();
+    }
 
     // Update blink timer if active
     _blinkTimer?.update(dt);

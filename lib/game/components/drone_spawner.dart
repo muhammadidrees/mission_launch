@@ -154,10 +154,15 @@ class DroneSpawner extends Component
         : DroneType.small;
 
     // Create and add the drone
-    final drone = Drone(
-      position: spawnPosition,
-      targetPosition: targetPosition,
-      type: droneType,
+    final drone = FlameBlocProvider<GameBloc, GameState>.value(
+      value: bloc,
+      children: [
+        Drone(
+          position: spawnPosition,
+          targetPosition: targetPosition,
+          type: droneType,
+        ),
+      ],
     );
 
     game.add(drone);

@@ -120,13 +120,18 @@ class AsteroidSpawner extends Component
     final baseSpeed = 80 + _random.nextInt(60); // 80-140 pixels per second
 
     // Create and add the asteroid
-    final asteroid = Asteroid(
-      position: position,
-      type: asteroidType,
-      baseSpeed: baseSpeed.toDouble(),
-      targetSpaceship: targetSpaceship,
-      direction: direction,
-      rotationSpeed: (_random.nextDouble() - 0.5) * 2, // -1 to 1
+    final asteroid = FlameBlocProvider<GameBloc, GameState>.value(
+      value: bloc,
+      children: [
+        Asteroid(
+          position: position,
+          type: asteroidType,
+          baseSpeed: baseSpeed.toDouble(),
+          targetSpaceship: targetSpaceship,
+          direction: direction,
+          rotationSpeed: (_random.nextDouble() - 0.5) * 2, // -1 to 1
+        ),
+      ],
     );
 
     game.add(asteroid);

@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:mission_launch/game/bloc/bloc.dart';
 import 'package:mission_launch/game/config/game_config.dart';
-import 'package:mission_launch/game/game.dart';
 
 /// {@template game_state}
 /// Represents the current state of the game.
@@ -20,6 +19,7 @@ class GameState extends Equatable {
     this.isGameOver = false,
     this.phaseTransitioned = false,
     this.missionComplete = false,
+    this.successAnimationActive = false,
   });
 
   /// Initial game state
@@ -66,6 +66,9 @@ class GameState extends Equatable {
 
   /// Whether the mission is complete (reached 100% and final phase)
   final bool missionComplete;
+
+  /// Whether the success animation sequence is currently active
+  final bool successAnimationActive;
 
   /// Progress of the journey (0.0 - 1.0)
   double get progress {
@@ -153,17 +156,17 @@ class GameState extends Equatable {
   }
 
   /// Check if drones are enabled in current phase
-  bool get dronesEnabled =>
-      phase != GamePhase.missionComplete && !missionComplete;
+  bool get dronesEnabled => phase != GamePhase.missionComplete && !gameStop;
 
   /// Check if asteroids are enabled in current phase
   bool get asteroidsEnabled =>
       (phase == GamePhase.deepSpace || phase == GamePhase.lunarApproach) &&
-      !missionComplete;
+      !gameStop;
 
   /// Check if aliens are enabled in current phase
-  bool get aliensEnabled =>
-      phase == GamePhase.lunarApproach && !missionComplete;
+  bool get aliensEnabled => phase == GamePhase.lunarApproach && !gameStop;
+
+  bool get gameStop => missionComplete || isGameOver;
 
   /// Copy this state with some new values
   GameState copyWith({
@@ -177,6 +180,7 @@ class GameState extends Equatable {
     bool? isGameOver,
     bool? phaseTransitioned,
     bool? missionComplete,
+    bool? successAnimationActive,
   }) {
     return GameState(
       config: config ?? this.config,
@@ -189,6 +193,8 @@ class GameState extends Equatable {
       isGameOver: isGameOver ?? this.isGameOver,
       phaseTransitioned: phaseTransitioned ?? this.phaseTransitioned,
       missionComplete: missionComplete ?? this.missionComplete,
+      successAnimationActive:
+          successAnimationActive ?? this.successAnimationActive,
     );
   }
 
@@ -204,5 +210,6 @@ class GameState extends Equatable {
         isGameOver,
         phaseTransitioned,
         missionComplete,
+        successAnimationActive,
       ];
 }
