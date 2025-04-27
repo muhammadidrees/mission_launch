@@ -5,7 +5,7 @@ import 'package:mission_launch/game/bloc/bloc.dart';
 import 'package:mission_launch/game/game.dart';
 
 /// A component that spawns enemy aliens at random positions
-class AlienSpawner extends Component 
+class AlienSpawner extends Component
     with HasGameReference<MissionLaunch>, FlameBlocReader<GameBloc, GameState> {
   /// Creates an [AlienSpawner]
   AlienSpawner({

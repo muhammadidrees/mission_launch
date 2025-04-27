@@ -5,7 +5,7 @@ import 'package:mission_launch/game/bloc/bloc.dart';
 import 'package:mission_launch/game/game.dart';
 
 /// A component that spawns asteroids at random positions and intervals
-class AsteroidSpawner extends Component 
+class AsteroidSpawner extends Component
     with HasGameReference<MissionLaunch>, FlameBlocReader<GameBloc, GameState> {
   /// Creates an [AsteroidSpawner]
   AsteroidSpawner({

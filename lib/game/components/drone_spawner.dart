@@ -5,7 +5,7 @@ import 'package:mission_launch/game/bloc/bloc.dart';
 import 'package:mission_launch/game/game.dart';
 
 /// A component that spawns enemy drones at random positions
-class DroneSpawner extends Component 
+class DroneSpawner extends Component
     with HasGameReference<MissionLaunch>, FlameBlocReader<GameBloc, GameState> {
   /// Creates a [DroneSpawner]
   DroneSpawner({
@@ -60,7 +60,7 @@ class DroneSpawner extends Component
   @override
   void update(double dt) {
     super.update(dt);
-    
+
     // Don't spawn drones if they're disabled in the current phase
     if (!bloc.state.dronesEnabled) {
       return;

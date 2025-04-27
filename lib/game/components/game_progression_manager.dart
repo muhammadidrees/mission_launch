@@ -11,7 +11,10 @@ import 'package:mission_launch/game/game.dart';
 /// - Handling mission success UI when 100% is reached
 /// {@endtemplate}
 class GameProgressionManager extends PositionComponent
-    with HasGameReference<MissionLaunch>, FlameBlocReader<GameBloc, GameState>, FlameBlocListenable<GameBloc, GameState> {
+    with
+        HasGameReference<MissionLaunch>,
+        FlameBlocReader<GameBloc, GameState>,
+        FlameBlocListenable<GameBloc, GameState> {
   /// {@macro game_progression_manager}
   GameProgressionManager({
     this.progressBarWidth = 200.0,
@@ -52,24 +55,24 @@ class GameProgressionManager extends PositionComponent
   @override
   void onNewState(GameState state) {
     // Check for mission success (100% progress and mission complete phase)
-    if (state.progressPercent >= 100 && 
+    if (state.progressPercent >= 100 &&
         state.phase == GamePhase.missionComplete &&
         !_missionSuccessTriggered) {
       _handleMissionSuccess();
     }
   }
-  
+
   // Handle mission success
   void _handleMissionSuccess() {
     // Only trigger this once
     if (_missionSuccessTriggered) return;
     _missionSuccessTriggered = true;
-    
+
     // Add mission success overlay
     if (game.hasOverlay('game_over')) {
       game.overlays.remove('game_over');
     }
-    
+
     // Add success overlay if it exists
     game.overlays.add('success');
   }
