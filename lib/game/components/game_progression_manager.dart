@@ -3,7 +3,8 @@ import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:mission_launch/game/game.dart';
 
-/// Defines the different phases of gameplay during the journey from Earth to Moon
+/// Defines the different phases of gameplay
+///  during the journey from Earth to Moon
 enum GamePhase {
   /// Phase 1: Only drones (0-60 seconds)
   earthOrbit,
@@ -185,19 +186,20 @@ class GameProgressionManager extends PositionComponent
 
     // Color changes based on phase
     final progressColor = _getProgressColor();
-    canvas.drawRect(
-      progressRect,
-      Paint()..color = progressColor,
-    );
+    canvas
+      ..drawRect(
+        progressRect,
+        Paint()..color = progressColor,
+      )
 
-    // Draw border around progress bar
-    canvas.drawRect(
-      backgroundRect,
-      Paint()
-        ..color = Colors.white
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 2,
-    );
+      // Draw border around progress bar
+      ..drawRect(
+        backgroundRect,
+        Paint()
+          ..color = Colors.white
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2,
+      );
 
     // Draw small Earth icon at start
     _drawEarth(canvas);

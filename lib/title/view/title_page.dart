@@ -41,8 +41,7 @@ class TitleView extends StatelessWidget {
           NesButton.text(
             type: NesButtonType.normal,
             onPressed: () {
-              Navigator.of(context)
-                  .pushReplacement<void, void>(GamePage.route());
+              Navigator.of(context).push(GamePage.route());
             },
             text: 'Start Game',
           ),

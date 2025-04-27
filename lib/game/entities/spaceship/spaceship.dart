@@ -1,7 +1,9 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
+import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:mission_launch/game/bloc/bloc.dart';
 import 'package:mission_launch/game/entities/spaceship/behaviors/behaviors.dart';
 import 'package:mission_launch/gen/assets.gen.dart';
 
@@ -16,7 +18,11 @@ enum SpaceshipState {
 /// {@template spaceship}
 /// A spaceship that can be controlled with left/right arrow keys.
 /// {@endtemplate}
-class Spaceship extends PositionedEntity with HasGameReference {
+class Spaceship extends PositionedEntity
+    with
+        HasGameReference,
+        FlameBlocReader<GameBloc, GameState>,
+        FlameBlocListenable<GameBloc, GameState> {
   /// {@macro spaceship}
   Spaceship({
     required super.position,
@@ -75,10 +81,10 @@ class Spaceship extends PositionedEntity with HasGameReference {
   Timer? _blinkTimer;
 
   /// Get the current health
-  int get health => _health;
+  int get health => bloc.state.rocketHealth;
 
   /// Check if the spaceship is destroyed (health <= 0)
-  bool get isDestroyed => _health <= 0;
+  bool get isDestroyed => health <= 0;
 
   /// Check if the spaceship is currently invincible
   bool get isInvincible => _isInvincible;
@@ -91,17 +97,27 @@ class Spaceship extends PositionedEntity with HasGameReference {
     _health -= amount;
     if (_health < 0) _health = 0;
 
+    bloc.add(RocketDamaged(damageAmount: amount));
+
     // If spaceship is now destroyed, show the broken animation
     if (isDestroyed && _currentState != SpaceshipState.broken) {
       _currentState = SpaceshipState.broken;
       _updateAnimation();
     } else {
-      // Activate invincibility and blinking effect
       _activateInvincibility();
     }
   }
 
-  /// Activates temporary invincibility and blinking effect
+  @override
+  Future<void> onNewState(GameState state) async {
+    if (state.isGameOver) {
+      _currentState = SpaceshipState.broken;
+      _updateAnimation();
+
+      game.overlays.add('game_over');
+    }
+  }
+
   void _activateInvincibility() {
     _isInvincible = true;
 
@@ -158,6 +174,7 @@ class Spaceship extends PositionedEntity with HasGameReference {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     // Load all spaceship animations
     _animations[SpaceshipState.idle] = SpriteAnimation.fromFrameData(
       game.images.fromCache(Assets.images.spaceshipIdle.path),
@@ -208,6 +225,8 @@ class Spaceship extends PositionedEntity with HasGameReference {
   @override
   void update(double dt) {
     super.update(dt);
+
+    bloc.add(GameTick(deltaTime: dt));
 
     // Update blink timer if active
     _blinkTimer?.update(dt);

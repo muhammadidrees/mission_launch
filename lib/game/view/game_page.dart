@@ -2,28 +2,34 @@ import 'package:flame/game.dart' hide Route;
 import 'package:flame_audio/bgm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mission_launch/game/bloc/bloc.dart';
+import 'package:mission_launch/game/config/game_config.dart';
 import 'package:mission_launch/game/game.dart';
 import 'package:mission_launch/l10n/l10n.dart';
 import 'package:mission_launch/loading/cubit/cubit.dart';
+import 'package:nes_ui/nes_ui.dart';
 
 class GamePage extends StatelessWidget {
   const GamePage({super.key});
 
   static Route<void> route() {
-    return MaterialPageRoute<void>(
-      builder: (_) => const GamePage(),
-    );
+    return MaterialPageRoute<void>(builder: (_) => const GamePage());
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) {
-        return AudioCubit(audioCache: context.read<PreloadCubit>().audio);
-      },
-      child: const Scaffold(
-        body: SafeArea(child: GameView()),
-      ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) {
+            return AudioCubit(audioCache: context.read<PreloadCubit>().audio);
+          },
+        ),
+        BlocProvider(
+          create: (context) => GameBloc(config: GameConfig.easy()),
+        ),
+      ],
+      child: const Scaffold(body: SafeArea(child: GameView())),
     );
   }
 }
@@ -68,10 +74,19 @@ class _GameViewState extends State<GameView> {
           effectPlayer: context.read<AudioCubit>().effectPlayer,
           textStyle: textStyle,
           images: context.read<PreloadCubit>().images,
+          gameBloc: context.read<GameBloc>(),
         );
     return Stack(
       children: [
-        Positioned.fill(child: GameWidget(game: _game!)),
+        Positioned.fill(
+          child: GameWidget(
+            game: _game!,
+            overlayBuilderMap: {
+              'game_over': (context, game) => const GameOverOverlay(),
+              // 'success': (context, game) => const SuccessOverlay(),
+            },
+          ),
+        ),
         Align(
           alignment: Alignment.topRight,
           child: BlocBuilder<AudioCubit, AudioState>(
@@ -85,7 +100,43 @@ class _GameViewState extends State<GameView> {
             },
           ),
         ),
+        Align(
+          child: BlocBuilder<GameBloc, GameState>(
+            builder: (context, state) {
+              return Text(
+                '${state.progressPercent}%',
+                style: TextTheme.of(context).displayLarge!.copyWith(
+                      color: Colors.white.withOpacity(0.4),
+                    ),
+              );
+            },
+          ),
+        ),
       ],
+    );
+  }
+}
+
+class GameOverOverlay extends StatelessWidget {
+  const GameOverOverlay({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            height: 120,
+            child: NesBlinker(
+              child: Text(
+                'Mission Failed',
+                style: TextTheme.of(context).displayLarge,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

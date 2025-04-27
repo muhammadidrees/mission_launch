@@ -3,7 +3,9 @@ import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flutter/painting.dart';
+import 'package:mission_launch/game/bloc/bloc.dart';
 import 'package:mission_launch/game/game.dart';
 import 'package:mission_launch/l10n/l10n.dart';
 
@@ -14,6 +16,7 @@ class MissionLaunch extends FlameGame
     required this.effectPlayer,
     required this.textStyle,
     required Images images,
+    required this.gameBloc,
   }) {
     this.images = images;
   }
@@ -23,6 +26,8 @@ class MissionLaunch extends FlameGame
   final AudioPlayer effectPlayer;
 
   final TextStyle textStyle;
+
+  final GameBloc gameBloc;
 
   int counter = 0;
 
@@ -45,14 +50,15 @@ class MissionLaunch extends FlameGame
       position: Vector2(size.x / 2, size.y - 80),
     );
 
-    // Create the progression manager first, so it's available to all components
+    // Create the progression manager first, so it's available
+    // to all components
     progressionManager = GameProgressionManager(
-      totalMissionDuration: 180, // 3 minutes total
       progressBarWidth: size.x * 0.6, // Make it 60% of screen width
       progressBarHeight: 18,
     );
-    
-    // Add progression manager to the game first so it's available to all components
+
+    // Add progression manager to the game first so it's
+    // available to all components
     await add(progressionManager);
 
     // Create the game world with all entities
@@ -87,26 +93,33 @@ class MissionLaunch extends FlameGame
     );
 
     // Add all components to the game
-    await addAll([world, camera, uiComponent]);
+    await addAll([
+      FlameBlocProvider<GameBloc, GameState>.value(
+        value: gameBloc,
+        children: [world],
+      ),
+      camera,
+      uiComponent,
+    ]);
 
     camera.viewfinder.position = size / 2;
   }
-  
+
   /// Get the current phase of the game
   GamePhase get currentPhase => progressionManager.currentPhase;
-  
+
   /// Get the progress as a percentage (0-100)
   int get progressPercent => progressionManager.progressPercent;
-  
+
   /// Get the name of the current phase
   String get phaseName => progressionManager.phaseName;
-  
+
   /// Get remaining time formatted as mm:ss
   String get remainingTime => progressionManager.remainingTimeFormatted;
-  
+
   /// Get elapsed time formatted as mm:ss
   String get elapsedTime => progressionManager.elapsedTimeFormatted;
-  
+
   /// Get the color associated with the current phase
   Color get phaseColor => progressionManager.phaseColor;
 }
