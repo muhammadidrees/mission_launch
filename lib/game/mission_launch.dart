@@ -62,8 +62,6 @@ class MissionLaunch extends FlameGame
     await add(progressionManager);
 
     await add(
-      // Add the parallax background as the first
-      // element so it appears behind everything else
       ParallaxBackgroundComponent(baseVelocity: 10),
     );
 
@@ -94,9 +92,7 @@ class MissionLaunch extends FlameGame
       );
 
     // Create and configure the game camera
-    final camera = CameraComponent(
-      world: world,
-    );
+    final camera = CameraComponent(world: world);
 
     // Add all components to the game
     await addAll([
