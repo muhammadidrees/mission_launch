@@ -200,11 +200,13 @@ class _BarSelectorState extends State<BarSelector> {
       children: [
         Row(
           children: [
-            Text(
-              widget.title,
-              style: Theme.of(context).textTheme.bodyLarge,
+            Flexible(
+              child: Text(
+                widget.title,
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: 8),
             NesTooltip(
               message: widget.information,
               arrowDirection: NesTooltipArrowDirection.bottom,
@@ -213,46 +215,56 @@ class _BarSelectorState extends State<BarSelector> {
             ),
           ],
         ),
-        const SizedBox(height: 16),
-        Row(
-          children: List.generate(
-            widget.totalOptions,
-            (index) {
-              final barIndex = index + 1;
-              final isSelected = barIndex <= _selectedValue;
-              final isDefault = barIndex <= widget.defaultSelection;
-              final isDisabled = barIndex > widget.maxAllowedSelection;
+        const SizedBox(height: 12),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final itemWidth = (constraints.maxWidth / widget.totalOptions) - 12;
+            return SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: List.generate(
+                  widget.totalOptions,
+                  (index) {
+                    final barIndex = index + 1;
+                    final isSelected = barIndex <= _selectedValue;
+                    final isDefault = barIndex <= widget.defaultSelection;
+                    final isDisabled = barIndex > widget.maxAllowedSelection;
 
-              return Padding(
-                padding: const EdgeInsets.only(right: 20),
-                child: GestureDetector(
-                  onTap: isDisabled ? null : () => _selectBar(barIndex),
-                  child: NesContainer(
-                    width: 100,
-                    height: 40,
-                    backgroundColor: isSelected
-                        ? Colors.white
-                        : isDefault
-                            ? Colors.grey
-                            : isDisabled
-                                ? Colors.black54
-                                : Colors.blueGrey,
-                    child: Center(
-                      child: Text(
-                        '$barIndex',
-                        style: TextStyle(
-                          color: isSelected ? Colors.white : Colors.black54,
-                          fontWeight: FontWeight.bold,
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 16),
+                      child: GestureDetector(
+                        onTap: isDisabled ? null : () => _selectBar(barIndex),
+                        child: NesContainer(
+                          width: itemWidth.clamp(40.0, 100.0),
+                          height: 36,
+                          backgroundColor: isSelected
+                              ? Colors.white
+                              : isDefault
+                                  ? Colors.grey
+                                  : isDisabled
+                                      ? Colors.black54
+                                      : Colors.blueGrey,
+                          child: Center(
+                            child: Text(
+                              '$barIndex',
+                              style: TextStyle(
+                                color:
+                                    isSelected ? Colors.white : Colors.black54,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
+              ),
+            );
+          },
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 12),
         Align(
           alignment: Alignment.centerRight,
           child: Text(

@@ -1,6 +1,7 @@
 // ignore_for_file: lines_longer_than_80_chars
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mission_launch/gen/assets.gen.dart';
 import 'package:mission_launch/rocket_workshop/rocket_workshop.dart';
 import 'package:nes_ui/nes_ui.dart';
@@ -23,9 +24,11 @@ class BossOfficeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final playerName = context.read<RocketWorkshopCubit>().state.playerName;
     return InterpretorWidget(
       image: Assets.images.bossOffice.path,
-      dialogs: const [
+      dialogs: [
+        'Asalam o Alaikum, $playerName',
         'Welcome to the PASA! A passion company for space exploration.',
         'I am the boss of this company. I started this company for my daughter, KAKA. She is a loves rockets and I love her.',
         'Anyways nowadays, everyone is talking about the moon.',
