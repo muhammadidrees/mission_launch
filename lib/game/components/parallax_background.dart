@@ -22,16 +22,19 @@ class ParallaxBackgroundComponent extends ParallaxComponent<MissionLaunch> {
   @override
   Future<void> onLoad() async {
     // Load the background image
-    _parallax = await game.loadParallax(
-      [
-        ParallaxImageData(Assets.images.bacground.path),
-      ],
-      // size: Vector2(100, 100),
-      // baseVelocity: Vector2(0, -baseVelocity),
-      // repeat: ImageRepeat.repeat,
-      fill: LayerFill.none,
-      alignment: Alignment.bottomCenter,
-    );
+    _parallax = await game.loadParallax([
+      // ParallaxImageData(Assets.images.background1.path),
+      ParallaxImageData(Assets.images.background2.path),
+      ParallaxImageData(Assets.images.background3.path),
+    ],
+        // size: Vector2(100, 100),
+        baseVelocity: Vector2(0, -1),
+        velocityMultiplierDelta: Vector2(0, 5),
+        size: Vector2(50, 50),
+        repeat: ImageRepeat.repeat,
+        fill: LayerFill.none,
+        alignment: Alignment.bottomCenter,
+        filterQuality: FilterQuality.low);
 
     parallax = _parallax;
   }

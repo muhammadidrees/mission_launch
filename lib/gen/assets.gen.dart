@@ -87,6 +87,18 @@ class $AssetsImagesGen {
   AssetGenImage get bacground =>
       const AssetGenImage('assets/images/bacground.png');
 
+  /// File path: assets/images/background-1.png
+  AssetGenImage get background1 =>
+      const AssetGenImage('assets/images/background-1.png');
+
+  /// File path: assets/images/background-2.png
+  AssetGenImage get background2 =>
+      const AssetGenImage('assets/images/background-2.png');
+
+  /// File path: assets/images/background-3.png
+  AssetGenImage get background3 =>
+      const AssetGenImage('assets/images/background-3.png');
+
   /// File path: assets/images/drone-broken.png
   AssetGenImage get droneBroken =>
       const AssetGenImage('assets/images/drone-broken.png');
@@ -125,6 +137,9 @@ class $AssetsImagesGen {
     asteroid2,
     asteroid3,
     bacground,
+    background1,
+    background2,
+    background3,
     droneBroken,
     drone,
     explode,

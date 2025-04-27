@@ -7,6 +7,7 @@ import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flutter/painting.dart';
 import 'package:mission_launch/game/bloc/bloc.dart';
 import 'package:mission_launch/game/game.dart';
+import 'package:mission_launch/gen/assets.gen.dart';
 import 'package:mission_launch/l10n/l10n.dart';
 
 class MissionLaunch extends FlameGame
@@ -60,6 +61,9 @@ class MissionLaunch extends FlameGame
     // Add progression manager to the game first so it's
     // available to all components
     await add(progressionManager);
+
+    // Load and add image component
+    await add(BackgroundComponent());
 
     await add(
       ParallaxBackgroundComponent(baseVelocity: 10),
@@ -124,4 +128,20 @@ class MissionLaunch extends FlameGame
 
   /// Get the color associated with the current phase
   Color get phaseColor => progressionManager.phaseColor;
+}
+
+/// A simple image background component
+class BackgroundComponent extends SpriteComponent
+    with HasGameReference<MissionLaunch> {
+  BackgroundComponent({super.priority = -100000});
+
+  @override
+  Future<void> onLoad() async {
+    sprite = Sprite(
+      game.images.fromCache(Assets.images.background1.path),
+    );
+    size = game.size;
+    position = game.size / 2;
+    anchor = Anchor.center;
+  }
 }
