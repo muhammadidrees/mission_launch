@@ -1,9 +1,12 @@
 import 'dart:math';
 import 'package:flame/components.dart';
+import 'package:flame_bloc/flame_bloc.dart';
+import 'package:mission_launch/game/bloc/bloc.dart';
 import 'package:mission_launch/game/game.dart';
 
 /// A component that spawns enemy aliens at random positions
-class AlienSpawner extends Component with HasGameReference<MissionLaunch> {
+class AlienSpawner extends Component 
+    with HasGameReference<MissionLaunch>, FlameBlocReader<GameBloc, GameState> {
   /// Creates an [AlienSpawner]
   AlienSpawner({
     this.spawnInterval = 8.0,
@@ -48,9 +51,6 @@ class AlienSpawner extends Component with HasGameReference<MissionLaunch> {
   /// Maximum number of attempts to find a valid non-overlapping position
   static const int _maxPositionAttempts = 10;
 
-  /// Cached reference to the game progression manager
-  GameProgressionManager? _progressionManager;
-
   @override
   void onMount() {
     super.onMount();
@@ -59,12 +59,10 @@ class AlienSpawner extends Component with HasGameReference<MissionLaunch> {
 
   @override
   void update(double dt) {
-    // Find progression manager if we haven't cached it yet
-    _progressionManager ??=
-        game.children.whereType<GameProgressionManager>().firstOrNull;
+    super.update(dt);
 
-    // Don't spawn aliens if progression manager says they're disabled
-    if (_progressionManager != null && !_progressionManager!.aliensEnabled) {
+    // Don't spawn aliens if they're disabled in the current phase
+    if (!bloc.state.aliensEnabled) {
       return;
     }
 

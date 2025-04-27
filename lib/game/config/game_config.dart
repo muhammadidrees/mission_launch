@@ -52,7 +52,7 @@ class GameConfig extends Equatable {
   /// Easy difficulty preset with longer mission duration and fewer enemies
   factory GameConfig.easy() {
     return GameConfig(
-      totalMissionDuration: 240, // 4 minutes
+      totalMissionDuration: 30, // 30 seconds
       phaseRatios: const [1, 1, 1], // Even phases
       maxDrones: 3,
       maxAsteroids: 2,

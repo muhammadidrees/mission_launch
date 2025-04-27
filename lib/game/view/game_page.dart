@@ -83,7 +83,7 @@ class _GameViewState extends State<GameView> {
             game: _game!,
             overlayBuilderMap: {
               'game_over': (context, game) => const GameOverOverlay(),
-              // 'success': (context, game) => const SuccessOverlay(),
+              'success': (context, game) => const SuccessOverlay(),
             },
           ),
         ),
@@ -131,6 +131,30 @@ class GameOverOverlay extends StatelessWidget {
             child: NesBlinker(
               child: Text(
                 'Mission Failed',
+                style: TextTheme.of(context).displayLarge,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SuccessOverlay extends StatelessWidget {
+  const SuccessOverlay({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            height: 120,
+            child: NesBlinker(
+              child: Text(
+                'Mission Successful',
                 style: TextTheme.of(context).displayLarge,
               ),
             ),

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:mission_launch/game/bloc/bloc.dart';
 import 'package:mission_launch/game/config/game_config.dart';
 import 'package:mission_launch/game/game.dart';
 
@@ -117,4 +118,12 @@ class PhaseTransition extends GameEvent {
 
   @override
   List<Object?> get props => [newPhase];
+}
+
+/// {@template mission_completed}
+/// Event emitted when the mission is completed (reached 100% progress).
+/// {@endtemplate}
+class MissionCompleted extends GameEvent {
+  /// {@macro mission_completed}
+  const MissionCompleted();
 }

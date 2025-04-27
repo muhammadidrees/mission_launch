@@ -1,9 +1,12 @@
 import 'dart:math';
 import 'package:flame/components.dart';
+import 'package:flame_bloc/flame_bloc.dart';
+import 'package:mission_launch/game/bloc/bloc.dart';
 import 'package:mission_launch/game/game.dart';
 
 /// A component that spawns asteroids at random positions and intervals
-class AsteroidSpawner extends Component with HasGameReference<MissionLaunch> {
+class AsteroidSpawner extends Component 
+    with HasGameReference<MissionLaunch>, FlameBlocReader<GameBloc, GameState> {
   /// Creates an [AsteroidSpawner]
   AsteroidSpawner({
     this.spawnInterval = 3.0,
@@ -41,9 +44,6 @@ class AsteroidSpawner extends Component with HasGameReference<MissionLaunch> {
   /// Timer to track when to spawn next asteroid
   double _timer = 0;
 
-  /// Cached reference to the game progression manager
-  GameProgressionManager? _progressionManager;
-
   @override
   void onMount() {
     super.onMount();
@@ -52,12 +52,10 @@ class AsteroidSpawner extends Component with HasGameReference<MissionLaunch> {
 
   @override
   void update(double dt) {
-    // Find progression manager if we haven't cached it yet
-    _progressionManager ??=
-        game.children.whereType<GameProgressionManager>().firstOrNull;
+    super.update(dt);
 
-    // Don't spawn asteroids if progression manager says they're disabled
-    if (_progressionManager != null && !_progressionManager!.asteroidsEnabled) {
+    // Don't spawn asteroids if they're disabled in the current phase
+    if (!bloc.state.asteroidsEnabled) {
       return;
     }
 

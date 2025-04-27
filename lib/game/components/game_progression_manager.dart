@@ -1,45 +1,26 @@
-import 'dart:math';
 import 'package:flame/components.dart';
+import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:mission_launch/game/bloc/bloc.dart';
 import 'package:mission_launch/game/game.dart';
 
-/// Defines the different phases of gameplay
-///  during the journey from Earth to Moon
-enum GamePhase {
-  /// Phase 1: Only drones (0-60 seconds)
-  earthOrbit,
-
-  /// Phase 2: Drones + asteroids (60-120 seconds)
-  deepSpace,
-
-  /// Phase 3: Drones + asteroids + aliens (120-180 seconds)
-  lunarApproach,
-
-  /// Mission complete - reached the Moon
-  missionComplete,
-}
-
 /// {@template game_progression_manager}
-/// Manages the game progression including:
-/// - Tracking progress through the mission
-/// - Controlling which enemy types spawn based on current phase
+/// Manages the visual representation of game progression including:
 /// - Displaying a progress bar showing journey from Earth to Moon
+/// - Showing different colors based on the current phase
+/// - Handling mission success UI when 100% is reached
 /// {@endtemplate}
 class GameProgressionManager extends PositionComponent
-    with HasGameReference<MissionLaunch> {
+    with HasGameReference<MissionLaunch>, FlameBlocReader<GameBloc, GameState>, FlameBlocListenable<GameBloc, GameState> {
   /// {@macro game_progression_manager}
   GameProgressionManager({
-    this.totalMissionDuration = 180.0, // 3 minutes in seconds
     this.progressBarWidth = 200.0,
     this.progressBarHeight = 15.0,
     Vector2? position,
     this.visibleOnUI = true,
-  }) : _elapsedTime = 0 {
+  }) {
     this.position = position ?? Vector2.zero();
   }
-
-  /// Total mission duration in seconds (Earth to Moon)
-  final double totalMissionDuration;
 
   /// Width of the progress bar
   final double progressBarWidth;
@@ -50,87 +31,12 @@ class GameProgressionManager extends PositionComponent
   /// Whether to display the progress bar on screen
   final bool visibleOnUI;
 
-  /// Current elapsed time in seconds
-  double _elapsedTime;
-
-  /// Current phase of the game
-  GamePhase _currentPhase = GamePhase.earthOrbit;
-
-  /// Whether drones can spawn
-  bool _dronesEnabled = true;
-
-  /// Whether asteroids can spawn
-  bool _asteroidsEnabled = false;
-
-  /// Whether aliens can spawn
-  bool _aliensEnabled = false;
-
-  /// Get current phase
-  GamePhase get currentPhase => _currentPhase;
-
-  /// Get current phase as a string
-  String get phaseName {
-    switch (_currentPhase) {
-      case GamePhase.earthOrbit:
-        return 'Earth Orbit';
-      case GamePhase.deepSpace:
-        return 'Deep Space';
-      case GamePhase.lunarApproach:
-        return 'Lunar Approach';
-      case GamePhase.missionComplete:
-        return 'Moon Reached!';
-    }
-  }
-
-  /// Check if drones are enabled
-  bool get dronesEnabled => _dronesEnabled;
-
-  /// Check if asteroids are enabled
-  bool get asteroidsEnabled => _asteroidsEnabled;
-
-  /// Check if aliens are enabled
-  bool get aliensEnabled => _aliensEnabled;
-
-  /// Get progress as a value between 0.0 and 1.0
-  double get progress => _elapsedTime / totalMissionDuration;
-
-  /// Get progress as a percentage (0-100)
-  int get progressPercent => (progress * 100).round();
-
-  /// Get remaining time in seconds
-  double get remainingTime => totalMissionDuration - _elapsedTime;
-
-  /// Get remaining time formatted as mm:ss
-  String get remainingTimeFormatted {
-    final minutes = (remainingTime / 60).floor();
-    final seconds = (remainingTime % 60).floor();
-    return '$minutes:${seconds.toString().padLeft(2, '0')}';
-  }
-
-  /// Get elapsed time in seconds
-  double get elapsedTime => _elapsedTime;
-
-  /// Get elapsed time formatted as mm:ss
-  String get elapsedTimeFormatted {
-    final minutes = (elapsedTime / 60).floor();
-    final seconds = (elapsedTime % 60).floor();
-    return '$minutes:${seconds.toString().padLeft(2, '0')}';
-  }
-
-  /// Get phase time as a percentage (how far through current phase)
-  double get phaseProgress {
-    final phaseTime = totalMissionDuration / 3;
-    final phase = (_elapsedTime / phaseTime).floor();
-    final phaseStartTime = phase * phaseTime;
-    return (_elapsedTime - phaseStartTime) / phaseTime;
-  }
-
-  /// Get the color for the current phase
-  Color get phaseColor => _getProgressColor();
+  /// Flag to track if mission success has been triggered
+  bool _missionSuccessTriggered = false;
 
   @override
-  void onLoad() {
-    super.onLoad();
+  Future<void> onLoad() async {
+    await super.onLoad();
     size = Vector2(progressBarWidth, progressBarHeight);
 
     // Position the progress bar at the top center of the screen
@@ -144,17 +50,28 @@ class GameProgressionManager extends PositionComponent
   }
 
   @override
-  void update(double dt) {
-    super.update(dt);
-
-    // Update elapsed time
-    _elapsedTime += dt;
-
-    // Cap at total mission duration
-    _elapsedTime = min(_elapsedTime, totalMissionDuration);
-
-    // Update phase based on elapsed time
-    _updatePhase();
+  void onNewState(GameState state) {
+    // Check for mission success (100% progress and mission complete phase)
+    if (state.progressPercent >= 100 && 
+        state.phase == GamePhase.missionComplete &&
+        !_missionSuccessTriggered) {
+      _handleMissionSuccess();
+    }
+  }
+  
+  // Handle mission success
+  void _handleMissionSuccess() {
+    // Only trigger this once
+    if (_missionSuccessTriggered) return;
+    _missionSuccessTriggered = true;
+    
+    // Add mission success overlay
+    if (game.hasOverlay('game_over')) {
+      game.overlays.remove('game_over');
+    }
+    
+    // Add success overlay if it exists
+    game.overlays.add('success');
   }
 
   @override
@@ -176,6 +93,9 @@ class GameProgressionManager extends PositionComponent
       Paint()..color = Colors.grey.withOpacity(0.5),
     );
 
+    // Calculate progress from the bloc
+    final progress = bloc.state.progress;
+
     // Draw progress bar fill
     final progressRect = Rect.fromLTWH(
       0,
@@ -184,8 +104,8 @@ class GameProgressionManager extends PositionComponent
       progressBarHeight,
     );
 
-    // Color changes based on phase
-    final progressColor = _getProgressColor();
+    // Get color from the bloc
+    final progressColor = bloc.state.phaseColor;
     canvas
       ..drawRect(
         progressRect,
@@ -208,47 +128,7 @@ class GameProgressionManager extends PositionComponent
     _drawMoon(canvas);
 
     // Draw spaceship indicator on progress bar
-    _drawSpaceshipMarker(canvas);
-  }
-
-  void _updatePhase() {
-    final phaseTime = totalMissionDuration / 3;
-
-    if (_elapsedTime < phaseTime) {
-      // Phase 1: Earth orbit - Only drones
-      _currentPhase = GamePhase.earthOrbit;
-      _dronesEnabled = true;
-      _asteroidsEnabled = false;
-      _aliensEnabled = false;
-    } else if (_elapsedTime < phaseTime * 2) {
-      // Phase 2: Deep space - Drones + asteroids
-      _currentPhase = GamePhase.deepSpace;
-      _dronesEnabled = true;
-      _asteroidsEnabled = true;
-      _aliensEnabled = false;
-    } else if (_elapsedTime < totalMissionDuration) {
-      // Phase 3: Lunar approach - All enemies
-      _currentPhase = GamePhase.lunarApproach;
-      _dronesEnabled = true;
-      _asteroidsEnabled = true;
-      _aliensEnabled = true;
-    } else {
-      // Mission complete
-      _currentPhase = GamePhase.missionComplete;
-    }
-  }
-
-  Color _getProgressColor() {
-    switch (_currentPhase) {
-      case GamePhase.earthOrbit:
-        return Colors.blue;
-      case GamePhase.deepSpace:
-        return Colors.purple;
-      case GamePhase.lunarApproach:
-        return Colors.orange;
-      case GamePhase.missionComplete:
-        return Colors.green;
-    }
+    _drawSpaceshipMarker(canvas, progress);
   }
 
   void _drawEarth(Canvas canvas) {
@@ -278,7 +158,7 @@ class GameProgressionManager extends PositionComponent
     );
   }
 
-  void _drawSpaceshipMarker(Canvas canvas) {
+  void _drawSpaceshipMarker(Canvas canvas, double progress) {
     final markerHeight = progressBarHeight * 1.5;
     final markerWidth = markerHeight * 0.5;
     final x = progressBarWidth * progress;
@@ -295,11 +175,5 @@ class GameProgressionManager extends PositionComponent
       path,
       Paint()..color = Colors.white,
     );
-  }
-
-  // Method to manually set the time for testing
-  void setTime(double seconds) {
-    _elapsedTime = seconds.clamp(0, totalMissionDuration);
-    _updatePhase();
   }
 }

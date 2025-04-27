@@ -2,7 +2,22 @@ import 'package:bloc/bloc.dart';
 import 'package:mission_launch/game/bloc/game_event.dart';
 import 'package:mission_launch/game/bloc/game_state.dart';
 import 'package:mission_launch/game/config/game_config.dart';
-import 'package:mission_launch/game/game.dart';
+
+/// Defines the different phases of gameplay
+///  during the journey from Earth to Moon
+enum GamePhase {
+  /// Phase 1: Only drones (0-60 seconds)
+  earthOrbit,
+
+  /// Phase 2: Drones + asteroids (60-120 seconds)
+  deepSpace,
+
+  /// Phase 3: Drones + asteroids + aliens (120-180 seconds)
+  lunarApproach,
+
+  /// Mission complete - reached the Moon
+  missionComplete,
+}
 
 /// {@template game_bloc}
 /// A bloc that manages the game state.
@@ -18,11 +33,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     on<GameReset>(_onGameReset);
     on<GameOver>(_onGameOver);
     on<PhaseTransition>(_onPhaseTransition);
+    on<MissionCompleted>(_onMissionCompleted);
   }
 
   void _onGameTick(GameTick event, Emitter<GameState> emit) {
-    // Skip ticks if the game is over
-    if (state.isGameOver) return;
+    // Skip ticks if the game is over or mission is complete
+    if (state.isGameOver || state.missionComplete) return;
 
     // Calculate how much time to advance based on rocket speed
     final speedRatio = state.rocketSpeed / state.config.initialRocketSpeed;
@@ -38,6 +54,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     // Check if the phase has changed
     final phaseChanged = newPhase != state.phase;
 
+    // Check if we've reached mission complete (100% progress)
+    final reachedComplete = newPhase == GamePhase.missionComplete &&
+        state.phase != GamePhase.missionComplete;
+
     // Emit the updated state
     emit(
       state.copyWith(
@@ -50,6 +70,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     // If the phase changed, emit a phase transition event
     if (phaseChanged) {
       add(PhaseTransition(newPhase: newPhase));
+    }
+
+    // If we've reached mission complete, trigger the mission completed event
+    if (reachedComplete) {
+      add(const MissionCompleted());
     }
 
     // Reset the phaseTransitioned flag after a brief delay if needed
@@ -116,6 +141,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     // This method can be used to trigger any special effects or
     // actions when the phase changes
     emit(state.copyWith(phase: event.newPhase));
+  }
+
+  void _onMissionCompleted(MissionCompleted event, Emitter<GameState> emit) {
+    // Set the mission complete flag
+    emit(state.copyWith(missionComplete: true));
   }
 
   /// Determine the current game phase based on elapsed time

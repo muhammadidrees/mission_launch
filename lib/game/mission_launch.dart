@@ -38,6 +38,9 @@ class MissionLaunch extends FlameGame
   /// Reference to the game progression manager
   late GameProgressionManager progressionManager;
 
+  /// Check if an overlay exists
+  bool hasOverlay(String overlayId) => overlays.isActive(overlayId);
+
   @override
   bool get debugMode => false;
 
@@ -60,7 +63,10 @@ class MissionLaunch extends FlameGame
 
     // Add progression manager to the game first so it's
     // available to all components
-    await add(progressionManager);
+    await add(FlameBlocProvider<GameBloc, GameState>.value(
+      value: gameBloc,
+      children: [progressionManager],
+    ));
 
     // Load and add image component
     await add(BackgroundComponent());
@@ -112,22 +118,22 @@ class MissionLaunch extends FlameGame
   }
 
   /// Get the current phase of the game
-  GamePhase get currentPhase => progressionManager.currentPhase;
+  // GamePhase get currentPhase => progressionManager.currentPhase;
 
-  /// Get the progress as a percentage (0-100)
-  int get progressPercent => progressionManager.progressPercent;
+  // /// Get the progress as a percentage (0-100)
+  // int get progressPercent => progressionManager.progressPercent;
 
-  /// Get the name of the current phase
-  String get phaseName => progressionManager.phaseName;
+  // /// Get the name of the current phase
+  // String get phaseName => progressionManager.phaseName;
 
-  /// Get remaining time formatted as mm:ss
-  String get remainingTime => progressionManager.remainingTimeFormatted;
+  // /// Get remaining time formatted as mm:ss
+  // String get remainingTime => progressionManager.remainingTimeFormatted;
 
-  /// Get elapsed time formatted as mm:ss
-  String get elapsedTime => progressionManager.elapsedTimeFormatted;
+  // /// Get elapsed time formatted as mm:ss
+  // String get elapsedTime => progressionManager.elapsedTimeFormatted;
 
-  /// Get the color associated with the current phase
-  Color get phaseColor => progressionManager.phaseColor;
+  // /// Get the color associated with the current phase
+  // Color get phaseColor => progressionManager.phaseColor;
 }
 
 /// A simple image background component
