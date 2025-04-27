@@ -18,9 +18,9 @@ class FallingAlien extends PositionedEntity
     this.fallSpeed = 220,
     this.rotationSpeed = 1.8,
   }) : super(
-          scale: Vector2.all(1.5),
+          scale: Vector2.all(1.6),
           anchor: Anchor.center,
-          size: Vector2(56, 48) * alienType.size,
+          size: Vector2(54, 36) * alienType.size,
           behaviors: [
             PropagatingCollisionBehavior(
               CircleHitbox(

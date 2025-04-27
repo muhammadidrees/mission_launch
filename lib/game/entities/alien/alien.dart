@@ -59,7 +59,7 @@ class Alien extends PositionedEntity
     required super.position,
     AlienType? type,
   }) : super(
-          scale: Vector2.all(1.5),
+          scale: Vector2.all(1.6),
           anchor: Anchor.center,
           behaviors: [
             PropagatingCollisionBehavior(
@@ -79,7 +79,7 @@ class Alien extends PositionedEntity
 
     // Initialize properties based on type
     _health = _type.health;
-    size = Vector2(56, 48) * _type.size;
+    size = Vector2(54, 36) * _type.size;
   }
 
   /// The type of alien
