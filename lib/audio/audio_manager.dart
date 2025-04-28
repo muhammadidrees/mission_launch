@@ -31,6 +31,7 @@ class AudioManager {
   late final AudioPool _droneShootPool;
   late final AudioPool _hitPool;
   late final AudioPool _dronePool;
+  late final AudioPool _spaceShipExplode;
 
   /// Audio stream players for continuous sounds
   late final AudioPlayer _alienFlyingPlayer;
@@ -120,6 +121,12 @@ class AudioManager {
     )
       ..start(volume: 0);
 
+    _spaceShipExplode = await AudioPool.create(
+      source: AssetSource(Assets.audio.explosion.replaceAll('assets/', '')),
+      maxPlayers: 1,
+    )
+      ..start(volume: 0);
+
     // Pre-cache other audio files
     await FlameAudio.audioCache.loadAll([
       Assets.audio.asteriodHit,
@@ -133,6 +140,7 @@ class AudioManager {
       Assets.audio.background,
       Assets.audio.effect,
       Assets.audio.alienFlying,
+      Assets.audio.explosion,
     ]);
   }
 
@@ -184,7 +192,7 @@ class AudioManager {
   /// Play drone shoot sound
   void playDroneShoot() {
     if (!_soundEnabled) return;
-    _droneShootPool.start(volume: _soundVolume);
+    _droneShootPool.start();
   }
 
   /// Play hit sound
@@ -197,6 +205,12 @@ class AudioManager {
   void playDrone() {
     if (!_soundEnabled) return;
     _dronePool.start(volume: _soundVolume);
+  }
+
+  /// Play spaceship explode sound
+  void playSpaceShipExplode() {
+    if (!_soundEnabled) return;
+    _spaceShipExplode.start(volume: _soundVolume);
   }
 
   /// Play alien flying sound (continuous)
@@ -272,5 +286,17 @@ class AudioManager {
     await _effectPlayer.dispose();
     await _alienFlyingPlayer.dispose();
     await _droneFlyingPlayer.dispose();
+    await _spaceShipExplode.dispose();
+    await _asteroidHitPool.dispose();
+    await _asteroidExplodePool.dispose();
+    await _spaceshipShootPool.dispose();
+    await _enemyExplodePool.dispose();
+    await _alienShootPool.dispose();
+    await _hitPool.dispose();
+    await _dronePool.dispose();
+    await _droneShootPool.dispose();
+    await _droneFlyingPlayer.dispose();
+    await _alienFlyingPlayer.dispose();
+    await _effectPlayer.dispose();
   }
 }

@@ -2,6 +2,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
 import 'package:flame_bloc/flame_bloc.dart';
+import 'package:mission_launch/audio/audio_manager.dart';
 import 'package:mission_launch/game/bloc/bloc.dart';
 import 'package:mission_launch/game/entities/spaceship/behaviors/behaviors.dart';
 import 'package:mission_launch/gen/assets.gen.dart';
@@ -96,6 +97,7 @@ class Spaceship extends PositionedEntity
     // If spaceship is now destroyed, show the broken animation
     if (isDestroyed && _currentState != SpaceshipState.broken) {
       _currentState = SpaceshipState.broken;
+
       _updateAnimation();
     } else {
       _activateInvincibility();
@@ -105,6 +107,8 @@ class Spaceship extends PositionedEntity
   @override
   Future<void> onNewState(GameState state) async {
     if (state.isGameOver) {
+      // Play explode sound
+      AudioManager.instance.playSpaceShipExplode();
       _currentState = SpaceshipState.broken;
       _updateAnimation();
       game.overlays.add('game_over');

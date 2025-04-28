@@ -35,6 +35,7 @@ class PreloadCubit extends Cubit<PreloadState> {
           Assets.audio.droneFlying,
           Assets.audio.alienShoot,
           Assets.audio.hit,
+          Assets.audio.explosion,
         ]),
       ),
       PreloadPhase(

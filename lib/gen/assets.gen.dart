@@ -39,6 +39,9 @@ class $AssetsAudioGen {
   /// File path: assets/audio/enemy-explode.mp3
   String get enemyExplode => 'assets/audio/enemy-explode.mp3';
 
+  /// File path: assets/audio/explosion.mp3
+  String get explosion => 'assets/audio/explosion.mp3';
+
   /// File path: assets/audio/hit.wav
   String get hit => 'assets/audio/hit.wav';
 
@@ -56,6 +59,7 @@ class $AssetsAudioGen {
     droneShoot,
     effect,
     enemyExplode,
+    explosion,
     hit,
     spaceshipShoot,
   ];
