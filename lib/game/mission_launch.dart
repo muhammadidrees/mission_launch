@@ -57,21 +57,21 @@ class MissionLaunch extends FlameGame
       position: Vector2(size.x / 2, size.y - 80),
     );
 
-    // Create the progression manager first, so it's available
-    // to all components
-    progressionManager = GameProgressionManager(
-      progressBarWidth: size.x * 0.6, // Make it 60% of screen width
-      progressBarHeight: 18,
-    );
+    // // Create the progression manager first, so it's available
+    // // to all components
+    // progressionManager = GameProgressionManager(
+    //   progressBarWidth: size.x * 0.6, // Make it 60% of screen width
+    //   progressBarHeight: 18,
+    // );
 
-    // Add progression manager to the game first so it's
-    // available to all components
-    await add(
-      FlameBlocProvider<GameBloc, GameState>.value(
-        value: gameBloc,
-        children: [progressionManager],
-      ),
-    );
+    // // Add progression manager to the game first so it's
+    // // available to all components
+    // await add(
+    //   FlameBlocProvider<GameBloc, GameState>.value(
+    //     value: gameBloc,
+    //     children: [progressionManager],
+    //   ),
+    // );
 
     // Load and add image component
     await add(BackgroundComponent());

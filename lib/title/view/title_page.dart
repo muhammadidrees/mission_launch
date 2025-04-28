@@ -26,43 +26,71 @@ class TitleView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            'Mission Launch',
-            style: TextTheme.of(context).displayLarge,
+    return Stack(
+      children: [
+        Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Mission Launch',
+                style: TextTheme.of(context).displayLarge,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Space race to the moon',
+                style: TextTheme.of(context).headlineSmall,
+              ),
+              const SizedBox(height: 56),
+              NesButton.text(
+                type: NesButtonType.normal,
+                onPressed: () async {
+                  // Navigator.of(context).push(GamePage.route());
+                  final name = await NesInputDialog.show(
+                    context: context,
+                    message: 'Please enter your name:',
+                  );
+
+                  if (name == null || name.isEmpty) {
+                    return;
+                  }
+
+                  if (!context.mounted) return;
+
+                  context.read<RocketWorkshopCubit>().setPlayerName(name);
+
+                  await Navigator.of(context).push(BossOfficePage.route());
+                },
+                text: 'Start Game',
+              ),
+            ],
           ),
-          const SizedBox(height: 16),
-          Text(
-            'Space race to the moon',
-            style: TextTheme.of(context).headlineSmall,
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'FMTOI',
+                  style: TextTheme.of(context).labelLarge?.copyWith(
+                        color: Colors.white70,
+                      ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'From the mind of Idrees',
+                  style: TextTheme.of(context).labelSmall?.copyWith(
+                        color: Colors.white70,
+                      ),
+                ),
+              ],
+            ),
           ),
-          const SizedBox(height: 56),
-          NesButton.text(
-            type: NesButtonType.normal,
-            onPressed: () async {
-              // Navigator.of(context).push(GamePage.route());
-              final name = await NesInputDialog.show(
-                context: context,
-                message: 'Please enter your name:',
-              );
-
-              if (name == null || name.isEmpty) {
-                return;
-              }
-
-              if (!context.mounted) return;
-
-              context.read<RocketWorkshopCubit>().setPlayerName(name);
-
-              await Navigator.of(context).push(BossOfficePage.route());
-            },
-            text: 'Start Game',
-          ),
-        ],
-      ),
+        )
+      ],
     );
   }
 }

@@ -115,6 +115,9 @@ class Spaceship extends PositionedEntity
     }
 
     if (state.missionComplete) {
+      // Play explode sound
+      await AudioManager.instance.stopBackgroundMusic();
+      AudioManager.instance.playSuccess();
       _currentState = SpaceshipState.idle;
       _updateAnimation();
 

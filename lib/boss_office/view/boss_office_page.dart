@@ -28,13 +28,14 @@ class BossOfficeView extends StatelessWidget {
     return InterpretorWidget(
       image: Assets.images.bossOffice.path,
       dialogs: [
-        'Asalam o Alaikum, $playerName',
-        'Welcome to the PASA! A passion company for space exploration.',
-        'I am the boss of this company. I started this company for my daughter, KAKA. She is a loves rockets and I love her.',
-        'Anyways nowadays, everyone is talking about the moon.',
-        'I have a mission for you.',
-        'You need to go to the moon and collect some samples.',
-        'Are you ready?',
+        'Asalam o Alaikum, $playerName!',
+        'Welcome to PASA — a company built with love and passion for space exploration.',
+        'I started PASA for my daughter, KAKA. She dreams of rockets and reaching the stars — and I want to make that dream a reality.',
+        "That's why this mission is so important, $playerName. I want our company to be the FIRST to reach the Moon!",
+        'But... we are running on a **very tight budget**, so you must build carefully.',
+        "And it won't be easy — rival companies are sending **drones** to sabotage us.",
+        'There are also asteroids... and some even whisper about **aliens** in deep space.',
+        'Stay sharp, plan smart, and make us proud.\nGood luck, $playerName. KAKA and I are counting on you!',
       ],
       onNextButtonPressed: () {
         Navigator.of(context)
@@ -76,7 +77,7 @@ class _InterpretorWidgetState extends State<InterpretorWidget> {
         ? Column(
             children: [
               Expanded(
-                flex: 3,
+                flex: 4,
                 child: SizedBox(
                   width: double.infinity,
                   child: Image.asset(widget.image, fit: BoxFit.cover),
@@ -91,7 +92,7 @@ class _InterpretorWidgetState extends State<InterpretorWidget> {
                       Expanded(
                         child: SingleChildScrollView(
                           child: NesRunningText(
-                            speed: 0.04,
+                            speed: 0.03,
                             text: widget.dialogs[currentDialogIndex],
                           ),
                         ),
@@ -155,7 +156,7 @@ class _InterpretorWidgetState extends State<InterpretorWidget> {
                         Expanded(
                           child: SingleChildScrollView(
                             child: NesRunningText(
-                              speed: 0.04,
+                              speed: 0.03,
                               text: widget.dialogs[currentDialogIndex],
                             ),
                           ),

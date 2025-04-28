@@ -31,7 +31,8 @@ class AudioManager {
   late final AudioPool _droneShootPool;
   late final AudioPool _hitPool;
   late final AudioPool _dronePool;
-  late final AudioPool _spaceShipExplode;
+  late final AudioPool _spaceShipExplodePool;
+  late final AudioPool _successPool;
 
   /// Audio stream players for continuous sounds
   late final AudioPlayer _alienFlyingPlayer;
@@ -121,8 +122,14 @@ class AudioManager {
     )
       ..start(volume: 0);
 
-    _spaceShipExplode = await AudioPool.create(
+    _spaceShipExplodePool = await AudioPool.create(
       source: AssetSource(Assets.audio.explosion.replaceAll('assets/', '')),
+      maxPlayers: 1,
+    )
+      ..start(volume: 0);
+
+    _successPool = await AudioPool.create(
+      source: AssetSource(Assets.audio.success.replaceAll('assets/', '')),
       maxPlayers: 1,
     )
       ..start(volume: 0);
@@ -141,6 +148,7 @@ class AudioManager {
       Assets.audio.effect,
       Assets.audio.alienFlying,
       Assets.audio.explosion,
+      Assets.audio.success,
     ]);
   }
 
@@ -210,7 +218,12 @@ class AudioManager {
   /// Play spaceship explode sound
   void playSpaceShipExplode() {
     if (!_soundEnabled) return;
-    _spaceShipExplode.start(volume: _soundVolume);
+    _spaceShipExplodePool.start(volume: _soundVolume);
+  }
+
+  void playSuccess() {
+    if (!_soundEnabled) return;
+    _successPool.start(volume: _soundVolume);
   }
 
   /// Play alien flying sound (continuous)
@@ -286,7 +299,7 @@ class AudioManager {
     await _effectPlayer.dispose();
     await _alienFlyingPlayer.dispose();
     await _droneFlyingPlayer.dispose();
-    await _spaceShipExplode.dispose();
+    await _spaceShipExplodePool.dispose();
     await _asteroidHitPool.dispose();
     await _asteroidExplodePool.dispose();
     await _spaceshipShootPool.dispose();
@@ -297,6 +310,6 @@ class AudioManager {
     await _droneShootPool.dispose();
     await _droneFlyingPlayer.dispose();
     await _alienFlyingPlayer.dispose();
-    await _effectPlayer.dispose();
+    await _successPool.dispose();
   }
 }

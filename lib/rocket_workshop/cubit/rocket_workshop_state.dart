@@ -125,5 +125,7 @@ class RocketWorkshopState extends Equatable {
         bulletSpeed,
         isBonusActive,
         showBoss,
+        maxBulletSpeed,
+        totalMoney,
       ];
 }

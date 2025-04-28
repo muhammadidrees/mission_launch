@@ -89,7 +89,7 @@ class WorkStation extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                'This is the rocket workshop. Here you can improve your rocket by adding health and speed bars.',
+                'Prepare your rocket for the mission. You have a budget of \$${state.totalMoney}.',
                 style: TextTheme.of(context).titleSmall,
               ),
               const SizedBox(height: 32),
@@ -99,7 +99,7 @@ class WorkStation extends StatelessWidget {
                     BarSelector(
                       title: 'Rocket Health',
                       information:
-                          'Select the number of health bars for your rocket.',
+                          'Select the number of health bars for your rocket. This makes the rocket heavy and affects the speed. Also the material attracts asteroids.',
                       totalOptions: 6,
                       defaultSelection: 1,
                       maxAllowedSelection: state.maxHealth,
@@ -114,7 +114,7 @@ class WorkStation extends StatelessWidget {
                     BarSelector(
                       title: 'Rocket Speed',
                       information:
-                          'Select the number of speed bars for your rocket.',
+                          'Select the number of speed bars for your rocket. This makes the rocket faster and requires rocket to be lighter. But noise of the rocket attract more enemies.',
                       totalOptions: 6,
                       defaultSelection: 1,
                       maxAllowedSelection: state.maxSpeed,
@@ -128,8 +128,7 @@ class WorkStation extends StatelessWidget {
                     const SizedBox(height: 16),
                     BarSelector(
                       title: 'Bullet Speed',
-                      information:
-                          'Select the number of speed bars for your rocket.',
+                      information: 'Firing speed of the rocket.',
                       totalOptions: 4,
                       defaultSelection: 1,
                       maxAllowedSelection: state.maxBulletSpeed,

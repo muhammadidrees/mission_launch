@@ -48,6 +48,9 @@ class $AssetsAudioGen {
   /// File path: assets/audio/spaceship-shoot.mp3
   String get spaceshipShoot => 'assets/audio/spaceship-shoot.mp3';
 
+  /// File path: assets/audio/success.mp3
+  String get success => 'assets/audio/success.mp3';
+
   /// List of all assets
   List<String> get values => [
     alienFlying,
@@ -62,6 +65,7 @@ class $AssetsAudioGen {
     explosion,
     hit,
     spaceshipShoot,
+    success,
   ];
 }
 
@@ -122,8 +126,22 @@ class $AssetsImagesGen {
   /// File path: assets/images/drone.png
   AssetGenImage get drone => const AssetGenImage('assets/images/drone.png');
 
+  /// File path: assets/images/earth.png
+  AssetGenImage get earth => const AssetGenImage('assets/images/earth.png');
+
   /// File path: assets/images/explode.png
   AssetGenImage get explode => const AssetGenImage('assets/images/explode.png');
+
+  /// File path: assets/images/good-news.png
+  AssetGenImage get goodNews =>
+      const AssetGenImage('assets/images/good-news.png');
+
+  /// File path: assets/images/moon.png
+  AssetGenImage get moon => const AssetGenImage('assets/images/moon.png');
+
+  /// File path: assets/images/normal-news.png
+  AssetGenImage get normalNews =>
+      const AssetGenImage('assets/images/normal-news.png');
 
   /// File path: assets/images/rocket-launch.png
   AssetGenImage get rocketLaunch =>
@@ -169,7 +187,11 @@ class $AssetsImagesGen {
     bossOffice,
     droneBroken,
     drone,
+    earth,
     explode,
+    goodNews,
+    moon,
+    normalNews,
     rocketLaunch,
     rocketWorkshop,
     spaceshipBroken,
