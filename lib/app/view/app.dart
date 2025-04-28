@@ -18,6 +18,7 @@ class App extends StatelessWidget {
           create: (_) => PreloadCubit(
             Images(prefix: ''),
             AudioCache(prefix: ''),
+            context,
           )..loadSequentially(),
         ),
         BlocProvider(

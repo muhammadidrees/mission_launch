@@ -9,10 +9,15 @@ import 'package:mission_launch/gen/assets.gen.dart';
 part 'preload_state.dart';
 
 class PreloadCubit extends Cubit<PreloadState> {
-  PreloadCubit(this.images, this.audio) : super(const PreloadState.initial());
+  PreloadCubit(
+    this.images,
+    this.audio,
+    this.context,
+  ) : super(const PreloadState.initial());
 
   final Images images;
   final AudioCache audio;
+  final BuildContext context;
 
   /// Load items sequentially allows display of what is being loaded
   Future<void> loadSequentially() async {
@@ -59,6 +64,25 @@ class PreloadCubit extends Cubit<PreloadState> {
           Assets.images.background2.path,
           Assets.images.background3.path,
         ]),
+      ),
+      PreloadPhase(
+        'static',
+        () async {
+          final images = [
+            Assets.images.bossOffice.path,
+            Assets.images.bossHappy.path,
+            Assets.images.rocketWorkshop.path,
+            Assets.images.goodNews.path,
+            Assets.images.badNews.path,
+            Assets.images.bacground.path,
+          ];
+
+          await Future.wait(
+            images.map(
+              (e) => precacheImage(AssetImage(e), context),
+            ),
+          );
+        },
       ),
     ];
 
