@@ -365,10 +365,10 @@ packages:
     dependency: "direct dev"
     description:
       name: flame_test
-      sha256: "54c7502dcfb7e0e9240ef6132222e9a83bc8f0c9b31c694e6a90a19c901bf6d6"
+      sha256: "3ac7b82ffd0af80d12ab4a50c18ce32eeeafc1e335d2c23268f022df4736ab45"
       url: "https://pub.dev"
     source: hosted
-    version: "1.19.0"
+    version: "1.19.1"
   flutter:
     dependency: "direct main"
     description: flutter
