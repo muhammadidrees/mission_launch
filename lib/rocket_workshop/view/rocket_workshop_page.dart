@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mission_launch/boss_office/boss_office.dart';
 import 'package:mission_launch/game/game.dart';
 import 'package:mission_launch/gen/assets.gen.dart';
 import 'package:mission_launch/rocket_workshop/rocket_workshop.dart';
@@ -25,21 +26,45 @@ class RocketWorkshopView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.expand(
-      child: Row(
-        children: [
-          const Expanded(child: WorkStation()),
-          Expanded(
-            child: SizedBox(
-              height: double.infinity,
-              child: Image.asset(
-                Assets.images.rocketWorkshop.path,
-                fit: BoxFit.cover,
+    return BlocBuilder<RocketWorkshopCubit, RocketWorkshopState>(
+      builder: (context, state) {
+        return Stack(
+          children: [
+            SizedBox.expand(
+              child: Row(
+                children: [
+                  const Expanded(child: WorkStation()),
+                  Expanded(
+                    child: SizedBox(
+                      height: double.infinity,
+                      child: Image.asset(
+                        Assets.images.rocketWorkshop.path,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ),
-        ],
-      ),
+            if (state.showBoss)
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: InterpretorWidget(
+                  isFullScreen: false,
+                  image: Assets.images.bossHappy.path,
+                  showSkipButton: false,
+                  dialogs: const [
+                    "I see you have chosen my daughter's name for the rocket. Which will make her so happy. Here is a $kBonus\$ bonus for you.",
+                  ],
+                  onNextButtonPressed: () {
+                    context.read<RocketWorkshopCubit>().hideBoss();
+                  },
+                  nextButtonText: 'Back to workshop',
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 }
@@ -115,6 +140,29 @@ class WorkStation extends StatelessWidget {
                             .setBulletSpeed(selectedValue);
                       },
                     ),
+                    const SizedBox(height: 16),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Rocket Name',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                        const SizedBox(height: 12),
+                        TextField(
+                          enabled: !state.isBonusActive,
+                          decoration: const InputDecoration(
+                            hintText: 'Enter your rocket name',
+                          ),
+                          onChanged: (value) {
+                            context
+                                .read<RocketWorkshopCubit>()
+                                .setRocketName(value);
+                          },
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -128,6 +176,11 @@ class WorkStation extends StatelessWidget {
               NesButton.text(
                 type: NesButtonType.normal,
                 onPressed: () {
+                  if (state.rocketName.toLowerCase() == 'kaka' &&
+                      !state.isBonusActive) {
+                    context.read<RocketWorkshopCubit>().showBoss();
+                    return;
+                  }
                   Navigator.of(context).pushReplacement<void, void>(
                     GamePage.route(),
                   );

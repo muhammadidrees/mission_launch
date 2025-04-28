@@ -52,6 +52,7 @@ class InterpretorWidget extends StatefulWidget {
     required this.onNextButtonPressed,
     required this.nextButtonText,
     this.showSkipButton = true,
+    this.isFullScreen = true,
     super.key,
   });
 
@@ -60,6 +61,7 @@ class InterpretorWidget extends StatefulWidget {
   final String nextButtonText;
   final VoidCallback onNextButtonPressed;
   final bool showSkipButton;
+  final bool isFullScreen;
 
   @override
   State<InterpretorWidget> createState() => _InterpretorWidgetState();
@@ -70,67 +72,132 @@ class _InterpretorWidgetState extends State<InterpretorWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          flex: 3,
-          child: SizedBox(
+    return widget.isFullScreen
+        ? Column(
+            children: [
+              Expanded(
+                flex: 3,
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Image.asset(widget.image, fit: BoxFit.cover),
+                ),
+              ),
+              Expanded(
+                child: NesContainer(
+                  width: double.infinity,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: NesRunningText(
+                            speed: 0.04,
+                            text: widget.dialogs[currentDialogIndex],
+                          ),
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          const Spacer(),
+                          if (widget.showSkipButton) ...[
+                            NesButton.text(
+                              type: NesButtonType.normal,
+                              onPressed: () {
+                                widget.onNextButtonPressed();
+                              },
+                              text: 'Skip',
+                            ),
+                            const SizedBox(width: 16),
+                          ],
+                          NesButton.text(
+                            type: NesButtonType.primary,
+                            onPressed: () {
+                              if (currentDialogIndex <
+                                  widget.dialogs.length - 1) {
+                                setState(() {
+                                  currentDialogIndex++;
+                                });
+                              } else {
+                                widget.onNextButtonPressed();
+                              }
+                            },
+                            text: currentDialogIndex < widget.dialogs.length - 1
+                                ? 'Next'
+                                : widget.nextButtonText,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          )
+        : SizedBox(
+            height: 300,
             width: double.infinity,
-            child: Image.asset(
-              Assets.images.bossOffice.path,
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        Expanded(
-          child: NesContainer(
-            width: double.infinity,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
               children: [
                 Expanded(
-                  child: SingleChildScrollView(
-                    child: NesRunningText(
-                      speed: 0.04,
-                      text: widget.dialogs[currentDialogIndex],
+                  child: NesContainer(
+                    child: SizedBox.expand(
+                      child: Image.asset(widget.image, fit: BoxFit.contain),
                     ),
                   ),
                 ),
-                Row(
-                  children: [
-                    if (widget.showSkipButton) ...[
-                      NesButton.text(
-                        type: NesButtonType.normal,
-                        onPressed: () {
-                          widget.onNextButtonPressed();
-                        },
-                        text: 'Skip',
-                      ),
-                      const SizedBox(width: 16),
-                    ],
-                    NesButton.text(
-                      type: NesButtonType.primary,
-                      onPressed: () {
-                        if (currentDialogIndex < widget.dialogs.length - 1) {
-                          setState(() {
-                            currentDialogIndex++;
-                          });
-                        } else {
-                          widget.onNextButtonPressed();
-                        }
-                      },
-                      text: currentDialogIndex < widget.dialogs.length - 1
-                          ? 'Next'
-                          : widget.nextButtonText,
+                Expanded(
+                  flex: 4,
+                  child: NesContainer(
+                    width: double.infinity,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: SingleChildScrollView(
+                            child: NesRunningText(
+                              speed: 0.04,
+                              text: widget.dialogs[currentDialogIndex],
+                            ),
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            const Spacer(),
+                            if (widget.showSkipButton) ...[
+                              NesButton.text(
+                                type: NesButtonType.normal,
+                                onPressed: () {
+                                  widget.onNextButtonPressed();
+                                },
+                                text: 'Skip',
+                              ),
+                              const SizedBox(width: 16),
+                            ],
+                            NesButton.text(
+                              type: NesButtonType.primary,
+                              onPressed: () {
+                                if (currentDialogIndex <
+                                    widget.dialogs.length - 1) {
+                                  setState(() {
+                                    currentDialogIndex++;
+                                  });
+                                } else {
+                                  widget.onNextButtonPressed();
+                                }
+                              },
+                              text:
+                                  currentDialogIndex < widget.dialogs.length - 1
+                                      ? 'Next'
+                                      : widget.nextButtonText,
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ],
             ),
-          ),
-        )
-        // const Placeholder(),
-      ],
-    );
+          );
   }
 }

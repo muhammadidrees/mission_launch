@@ -103,6 +103,10 @@ class $AssetsImagesGen {
   AssetGenImage get badNews =>
       const AssetGenImage('assets/images/bad-news.png');
 
+  /// File path: assets/images/boss-happy.png
+  AssetGenImage get bossHappy =>
+      const AssetGenImage('assets/images/boss-happy.png');
+
   /// File path: assets/images/boss-office.png
   AssetGenImage get bossOffice =>
       const AssetGenImage('assets/images/boss-office.png');
@@ -157,6 +161,7 @@ class $AssetsImagesGen {
     background2,
     background3,
     badNews,
+    bossHappy,
     bossOffice,
     droneBroken,
     drone,

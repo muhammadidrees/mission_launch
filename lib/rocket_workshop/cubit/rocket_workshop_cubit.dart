@@ -27,4 +27,17 @@ class RocketWorkshopCubit extends Cubit<RocketWorkshopState> {
   void setBulletSpeed(int bulletSpeed) {
     emit(state.copyWith(bulletSpeed: bulletSpeed));
   }
+
+  void showBoss() {
+    emit(state.copyWith(showBoss: true));
+  }
+
+  void hideBoss() {
+    emit(
+      state.copyWith(
+        showBoss: false,
+        isBonusActive: true,
+      ),
+    );
+  }
 }

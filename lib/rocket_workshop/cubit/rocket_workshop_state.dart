@@ -1,6 +1,7 @@
 part of 'rocket_workshop_cubit.dart';
 
 const double kTotalMoney = 1000;
+const double kBonus = 200;
 const double kHealthPrice = 100;
 const double kSpeedPrice = 100;
 const double kBulletSpeedPrice = 200;
@@ -12,6 +13,8 @@ class RocketWorkshopState extends Equatable {
     this.health = 1,
     this.speed = 1,
     this.bulletSpeed = 1,
+    this.isBonusActive = false,
+    this.showBoss = false,
   });
 
   final String playerName;
@@ -19,6 +22,8 @@ class RocketWorkshopState extends Equatable {
   final int health;
   final int speed;
   final int bulletSpeed;
+  final bool isBonusActive;
+  final bool showBoss;
 
   RocketWorkshopState copyWith({
     double? spentMoney,
@@ -27,6 +32,8 @@ class RocketWorkshopState extends Equatable {
     int? health,
     int? speed,
     int? bulletSpeed,
+    bool? isBonusActive,
+    bool? showBoss,
   }) {
     return RocketWorkshopState(
       playerName: playerName ?? this.playerName,
@@ -34,13 +41,22 @@ class RocketWorkshopState extends Equatable {
       health: health ?? this.health,
       speed: speed ?? this.speed,
       bulletSpeed: bulletSpeed ?? this.bulletSpeed,
+      isBonusActive: isBonusActive ?? this.isBonusActive,
+      showBoss: showBoss ?? this.showBoss,
     );
+  }
+
+  double get totalMoney {
+    if (isBonusActive) {
+      return kTotalMoney + kBonus;
+    }
+    return kTotalMoney;
   }
 
   double get defaultAmount => kHealthPrice + kSpeedPrice + kBulletSpeedPrice;
 
   double get remainingMoney =>
-      kTotalMoney -
+      totalMoney -
       (health * kHealthPrice) -
       (speed * kSpeedPrice) -
       (bulletSpeed * kBulletSpeedPrice) +
@@ -48,7 +64,7 @@ class RocketWorkshopState extends Equatable {
 
   int get maxHealth {
     // Calculate remaining money if we ignored health cost
-    final moneyForHealth = kTotalMoney -
+    final moneyForHealth = totalMoney -
         (speed * kSpeedPrice) -
         (bulletSpeed * kBulletSpeedPrice) +
         (defaultAmount - kHealthPrice);
@@ -69,7 +85,7 @@ class RocketWorkshopState extends Equatable {
 
   int get maxSpeed {
     // Calculate remaining money if we ignored speed cost
-    final moneyForSpeed = kTotalMoney -
+    final moneyForSpeed = totalMoney -
         (health * kHealthPrice) -
         (bulletSpeed * kBulletSpeedPrice) +
         (defaultAmount - kSpeedPrice);
@@ -107,5 +123,7 @@ class RocketWorkshopState extends Equatable {
         health,
         speed,
         bulletSpeed,
+        isBonusActive,
+        showBoss,
       ];
 }
