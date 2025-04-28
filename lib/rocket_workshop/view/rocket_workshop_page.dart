@@ -25,9 +25,7 @@ class RocketWorkshopView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: double.infinity,
-      width: double.infinity,
+    return SizedBox.expand(
       child: Row(
         children: [
           const Expanded(child: WorkStation()),
@@ -218,7 +216,7 @@ class _BarSelectorState extends State<BarSelector> {
         const SizedBox(height: 12),
         LayoutBuilder(
           builder: (context, constraints) {
-            final itemWidth = (constraints.maxWidth / widget.totalOptions) - 12;
+            final itemWidth = (constraints.maxWidth / widget.totalOptions) - 20;
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(

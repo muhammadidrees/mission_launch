@@ -7,6 +7,7 @@ import 'package:mission_launch/game/config/game_config.dart';
 import 'package:mission_launch/game/game.dart';
 import 'package:mission_launch/l10n/l10n.dart';
 import 'package:mission_launch/loading/cubit/cubit.dart';
+import 'package:mission_launch/rocket_workshop/cubit/rocket_workshop_cubit.dart';
 import 'package:nes_ui/nes_ui.dart';
 
 class GamePage extends StatelessWidget {
@@ -18,6 +19,7 @@ class GamePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final rocketWorkshopState = context.read<RocketWorkshopCubit>().state;
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -26,7 +28,17 @@ class GamePage extends StatelessWidget {
           },
         ),
         BlocProvider(
-          create: (context) => GameBloc(config: GameConfig.easy()),
+          create: (context) => GameBloc(
+            config: GameConfig.normal().copyWith(
+              totalMissionDuration: 600 - (rocketWorkshopState.speed * 25.0),
+              maxDrones: rocketWorkshopState.speed + 6,
+              maxAliens: rocketWorkshopState.speed + 4,
+              maxAsteroids: rocketWorkshopState.health + 5,
+              maxRocketHealth: rocketWorkshopState.health,
+              maxRocketSpeed: (rocketWorkshopState.speed * 25.0) + 160,
+              coolBulletCooldown: rocketWorkshopState.bulletSpeed / 10,
+            ),
+          ),
         ),
       ],
       child: const Scaffold(body: SafeArea(child: GameView())),
@@ -103,11 +115,24 @@ class _GameViewState extends State<GameView> {
         Align(
           child: BlocBuilder<GameBloc, GameState>(
             builder: (context, state) {
-              return Text(
-                '${state.progressPercent}%',
-                style: TextTheme.of(context).displayLarge!.copyWith(
-                      color: Colors.white.withOpacity(0.4),
+              return Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      '${state.progressPercent}%',
+                      style: TextTheme.of(context).displayLarge!.copyWith(
+                            color: Colors.white.withOpacity(0.4),
+                          ),
                     ),
+                    Text(
+                      '${state.rocketHealth} / ${state.maxRocketHealth}',
+                      style: TextTheme.of(context).displayLarge!.copyWith(
+                            color: Colors.white.withOpacity(0.4),
+                          ),
+                    ),
+                  ],
+                ),
               );
             },
           ),

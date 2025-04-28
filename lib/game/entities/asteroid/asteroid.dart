@@ -8,7 +8,6 @@ import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:mission_launch/audio/audio_manager.dart';
 import 'package:mission_launch/game/bloc/bloc.dart';
-import 'package:mission_launch/game/bloc/game_bloc.dart';
 import 'package:mission_launch/game/entities/asteroid/behaviors/behaviors.dart';
 import 'package:mission_launch/game/game.dart';
 import 'package:mission_launch/gen/assets.gen.dart';

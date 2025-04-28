@@ -13,12 +13,8 @@ class ShootingBehavior extends Behavior<Spaceship>
     with KeyboardHandler, HasGameReference<MissionLaunch> {
   /// {@macro shooting_behavior}
   ShootingBehavior({
-    this.cooldown = 0.5,
     this.shootKey = LogicalKeyboardKey.space,
   });
-
-  /// The cooldown between shots in seconds.
-  final double cooldown;
 
   /// The key that triggers shooting.
   final LogicalKeyboardKey shootKey;
@@ -57,7 +53,7 @@ class ShootingBehavior extends Behavior<Spaceship>
     // Add a timer to reset the cooldown
     parent.add(
       TimerComponent(
-        period: cooldown,
+        period: parent.cooldown,
         removeOnFinish: true,
         onTick: () {
           _canShoot = true;

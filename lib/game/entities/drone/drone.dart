@@ -23,7 +23,7 @@ enum DroneType {
     size: 1.5,
     health: 4,
     fireRate: 1.5,
-    damage: 2,
+    damage: 1,
     frameCount: 4,
     flyInSpeed: 250,
   );

@@ -68,7 +68,13 @@ class AlienSpawner extends Component
 
     _timer += dt;
 
-    final currentAliens = game.children.whereType<Alien>().length;
+    final currentAliens = game.children.where((component) {
+      if (component is FlameBlocProvider<GameBloc, GameState>) {
+        return component.children.any((child) => child is Alien);
+      }
+      return false;
+    }).length;
+
     if (currentAliens >= maxAliens) {
       return; // Don't spawn if max aliens already on screen
     }

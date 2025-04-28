@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:mission_launch/game/bloc/bloc.dart';
 import 'package:mission_launch/game/config/game_config.dart';
 
+const kBulletCooldown = 0.5;
+
 /// {@template game_state}
 /// Represents the current state of the game.
 /// {@endtemplate}
@@ -16,6 +18,10 @@ class GameState extends Equatable {
     required this.maxRocketHealth,
     required this.score,
     required this.phase,
+    this.maxDrones = 3,
+    this.maxAsteroids = 2,
+    this.maxAliens = 2,
+    this.coolBulletCooldown = kBulletCooldown,
     this.isGameOver = false,
     this.phaseTransitioned = false,
     this.missionComplete = false,
@@ -28,10 +34,14 @@ class GameState extends Equatable {
 
     return GameState(
       config: gameConfig,
-      rocketSpeed: gameConfig.initialRocketSpeed,
+      rocketSpeed: gameConfig.maxRocketSpeed,
       elapsedTime: 0,
-      rocketHealth: 3,
-      maxRocketHealth: 3,
+      rocketHealth: gameConfig.maxRocketHealth,
+      maxRocketHealth: gameConfig.maxRocketHealth,
+      maxDrones: gameConfig.maxDrones,
+      maxAsteroids: gameConfig.maxAsteroids,
+      maxAliens: gameConfig.maxAliens,
+      coolBulletCooldown: kBulletCooldown - gameConfig.coolBulletCooldown,
       score: 0,
       phase: GamePhase.earthOrbit,
     );
@@ -51,6 +61,18 @@ class GameState extends Equatable {
 
   /// Maximum rocket health
   final int maxRocketHealth;
+
+  /// Maximum number of drones
+  final int maxDrones;
+
+  /// Maximum number of asteroids
+  final int maxAsteroids;
+
+  /// Maximum number of aliens
+  final int maxAliens;
+
+  /// Cooldown time
+  final double coolBulletCooldown;
 
   /// Current game score
   final int score;
@@ -183,6 +205,9 @@ class GameState extends Equatable {
     bool? successAnimationActive,
   }) {
     return GameState(
+      maxDrones: maxDrones,
+      maxAsteroids: maxAsteroids,
+      maxAliens: maxAliens,
       config: config ?? this.config,
       rocketSpeed: rocketSpeed ?? this.rocketSpeed,
       elapsedTime: elapsedTime ?? this.elapsedTime,
@@ -205,6 +230,10 @@ class GameState extends Equatable {
         elapsedTime,
         rocketHealth,
         maxRocketHealth,
+        maxDrones,
+        maxAsteroids,
+        maxAliens,
+        coolBulletCooldown,
         score,
         phase,
         isGameOver,

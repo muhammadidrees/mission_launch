@@ -51,6 +51,7 @@ class InterpretorWidget extends StatefulWidget {
     required this.dialogs,
     required this.onNextButtonPressed,
     required this.nextButtonText,
+    this.showSkipButton = true,
     super.key,
   });
 
@@ -58,6 +59,7 @@ class InterpretorWidget extends StatefulWidget {
   final List<String> dialogs;
   final String nextButtonText;
   final VoidCallback onNextButtonPressed;
+  final bool showSkipButton;
 
   @override
   State<InterpretorWidget> createState() => _InterpretorWidgetState();
@@ -94,20 +96,34 @@ class _InterpretorWidgetState extends State<InterpretorWidget> {
                     ),
                   ),
                 ),
-                NesButton.text(
-                  type: NesButtonType.normal,
-                  onPressed: () {
-                    if (currentDialogIndex < widget.dialogs.length - 1) {
-                      setState(() {
-                        currentDialogIndex++;
-                      });
-                    } else {
-                      widget.onNextButtonPressed();
-                    }
-                  },
-                  text: currentDialogIndex < widget.dialogs.length - 1
-                      ? 'Next'
-                      : widget.nextButtonText,
+                Row(
+                  children: [
+                    if (widget.showSkipButton) ...[
+                      NesButton.text(
+                        type: NesButtonType.normal,
+                        onPressed: () {
+                          widget.onNextButtonPressed();
+                        },
+                        text: 'Skip',
+                      ),
+                      const SizedBox(width: 16),
+                    ],
+                    NesButton.text(
+                      type: NesButtonType.primary,
+                      onPressed: () {
+                        if (currentDialogIndex < widget.dialogs.length - 1) {
+                          setState(() {
+                            currentDialogIndex++;
+                          });
+                        } else {
+                          widget.onNextButtonPressed();
+                        }
+                      },
+                      text: currentDialogIndex < widget.dialogs.length - 1
+                          ? 'Next'
+                          : widget.nextButtonText,
+                    ),
+                  ],
                 ),
               ],
             ),

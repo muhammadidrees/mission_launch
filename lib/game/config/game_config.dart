@@ -12,6 +12,7 @@ class GameConfig extends Equatable {
     required this.maxDrones,
     required this.maxAsteroids,
     required this.maxAliens,
+    this.maxRocketHealth = 5,
     this.initialRocketSpeed = 120.0,
     this.maxRocketSpeed = 240.0,
     this.rocketAcceleration = 10.0,
@@ -22,6 +23,7 @@ class GameConfig extends Equatable {
     this.asteroidDifficultyIncrease = 0.05,
     this.alienSpawnInterval = 8.0,
     this.alienDifficultyIncrease = 0.08,
+    this.coolBulletCooldown = 0.1,
   }) : assert(
           phaseRatios.length == 3,
           'phaseRatios must have 3 values for Earth orbit, Deep space, '
@@ -104,8 +106,14 @@ class GameConfig extends Equatable {
   /// Maximum speed the rocket can achieve
   final double maxRocketSpeed;
 
+  /// Maximum health of the rocket
+  final int maxRocketHealth;
+
   /// How quickly the rocket accelerates
   final double rocketAcceleration;
+
+  /// Cooldown time for bullets
+  final double coolBulletCooldown;
 
   /// Multiplier for how much rocket speed affects progression
   final double progressionSpeedMultiplier;
@@ -141,6 +149,8 @@ class GameConfig extends Equatable {
     int? maxDrones,
     int? maxAsteroids,
     int? maxAliens,
+    int? maxRocketHealth,
+    double? coolBulletCooldown,
     double? initialRocketSpeed,
     double? maxRocketSpeed,
     double? rocketAcceleration,
@@ -158,6 +168,8 @@ class GameConfig extends Equatable {
       maxDrones: maxDrones ?? this.maxDrones,
       maxAsteroids: maxAsteroids ?? this.maxAsteroids,
       maxAliens: maxAliens ?? this.maxAliens,
+      maxRocketHealth: maxRocketHealth ?? this.maxRocketHealth,
+      coolBulletCooldown: coolBulletCooldown ?? this.coolBulletCooldown,
       initialRocketSpeed: initialRocketSpeed ?? this.initialRocketSpeed,
       maxRocketSpeed: maxRocketSpeed ?? this.maxRocketSpeed,
       rocketAcceleration: rocketAcceleration ?? this.rocketAcceleration,
@@ -179,7 +191,9 @@ class GameConfig extends Equatable {
   @override
   List<Object?> get props => [
         totalMissionDuration,
+        maxRocketHealth,
         phaseRatios,
+        coolBulletCooldown,
         maxDrones,
         maxAsteroids,
         maxAliens,

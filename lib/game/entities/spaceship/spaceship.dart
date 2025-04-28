@@ -2,7 +2,6 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
 import 'package:flame_bloc/flame_bloc.dart';
-import 'package:flutter/material.dart';
 import 'package:mission_launch/game/bloc/bloc.dart';
 import 'package:mission_launch/game/entities/spaceship/behaviors/behaviors.dart';
 import 'package:mission_launch/gen/assets.gen.dart';
@@ -25,36 +24,31 @@ class Spaceship extends PositionedEntity
     required super.position,
     this.maxHealth = 3,
     this.invincibilityDuration = 1.5,
+    this.speed = 200,
+    this.cooldown = 0.5,
   }) : super(
           anchor: Anchor.center,
           size: Vector2(40, 56),
           scale: Vector2.all(2),
           behaviors: [
             KeyboardMovingBehavior(),
-            ShootingBehavior(cooldown: 0.2),
+            ShootingBehavior(),
             PropagatingCollisionBehavior(
-              RectangleHitbox(
-                isSolid: true,
-              ),
+              RectangleHitbox(isSolid: true),
             ),
           ],
         ) {
     _health = maxHealth;
   }
 
-  /// Creates a test spaceship with custom behaviors.
-  @visibleForTesting
-  Spaceship.test({
-    required super.position,
-    super.behaviors,
-    this.maxHealth = 3,
-    this.invincibilityDuration = 1.5,
-  }) : super(size: Vector2(48, 32)) {
-    _health = maxHealth;
-  }
-
   /// The maximum health of the spaceship
   final int maxHealth;
+
+  /// Speed of the spaceship
+  final int speed;
+
+  /// Cooldown time for shooting (in seconds)
+  final double cooldown;
 
   /// Duration of invincibility after taking damage (in seconds)
   final double invincibilityDuration;

@@ -16,15 +16,11 @@ class KeyboardMovingBehavior extends Behavior<Spaceship>
         FlameBlocReader<GameBloc, GameState> {
   /// {@macro keyboard_moving_behavior}
   KeyboardMovingBehavior({
-    this.speed = 200,
     this.leftKey = LogicalKeyboardKey.arrowLeft,
     this.rightKey = LogicalKeyboardKey.arrowRight,
     this.upKey = LogicalKeyboardKey.arrowUp,
     this.downKey = LogicalKeyboardKey.arrowDown,
   });
-
-  /// The speed at which the spaceship moves.
-  final double speed;
 
   /// The left movement key.
   final LogicalKeyboardKey leftKey;
@@ -77,10 +73,10 @@ class KeyboardMovingBehavior extends Behavior<Spaceship>
   @override
   void update(double dt) {
     // Apply horizontal movement
-    parent.position.x += _horizontalMovement * speed * dt;
+    parent.position.x += _horizontalMovement * parent.speed * dt;
 
     // Apply vertical movement
-    parent.position.y += _verticalMovement * speed * dt;
+    parent.position.y += _verticalMovement * parent.speed * dt;
 
     // Clamp horizontal position to screen bounds
     parent.position.x = parent.position.x.clamp(

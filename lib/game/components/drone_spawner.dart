@@ -68,7 +68,13 @@ class DroneSpawner extends Component
 
     _timer += dt;
 
-    final currentDrones = game.children.whereType<Drone>().length;
+    final currentDrones = game.children.where((component) {
+      if (component is FlameBlocProvider<GameBloc, GameState>) {
+        return component.children.any((child) => child is Drone);
+      }
+      return false;
+    }).length;
+
     if (currentDrones >= maxDrones) {
       return; // Don't spawn if max drones already on screen
     }

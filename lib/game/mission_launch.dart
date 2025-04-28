@@ -51,6 +51,9 @@ class MissionLaunch extends FlameGame
   Future<void> onLoad() async {
     // Create the player spaceship
     _spaceship = Spaceship(
+      maxHealth: gameBloc.state.maxRocketHealth,
+      cooldown: gameBloc.state.coolBulletCooldown,
+      speed: gameBloc.state.rocketSpeed.round(),
       position: Vector2(size.x / 2, size.y - 80),
     );
 
@@ -74,7 +77,9 @@ class MissionLaunch extends FlameGame
     await add(BackgroundComponent());
 
     await add(
-      ParallaxBackgroundComponent(baseVelocity: 10),
+      ParallaxBackgroundComponent(
+        baseVelocity: (gameBloc.state.rocketSpeed * 0.18) + 1,
+      ),
     );
 
     // Create the game world with all entities
@@ -84,24 +89,24 @@ class MissionLaunch extends FlameGame
         _spaceship,
 
         // Add the alien spawner
-        AlienSpawner(maxAliens: 4),
+        AlienSpawner(
+          maxAliens: gameBloc.state.maxAliens,
+          spawnInterval: 4,
+          largeTypeProbability: 0.5,
+        ),
 
-        AsteroidSpawner(),
+        AsteroidSpawner(
+          maxAsteroids: gameBloc.state.maxAsteroids,
+          targetSpaceshipProbability: 0.5,
+        ),
 
-        DroneSpawner(),
+        DroneSpawner(
+          maxDrones: gameBloc.state.maxDrones,
+          spawnInterval: 2,
+          largeTypeProbability: 0.4,
+        ),
       ],
     );
-
-    // Create a UI component for displaying health and other UI elements
-    final uiComponent = PositionComponent()
-      // Add health display to the UI
-      ..add(
-        HealthDisplayComponent(
-          spaceship: _spaceship,
-          position: Vector2(10, 10),
-          heartSize: 24,
-        ),
-      );
 
     // Create and configure the game camera
     final camera = CameraComponent(world: world);
@@ -112,13 +117,11 @@ class MissionLaunch extends FlameGame
         value: gameBloc,
         children: [
           world,
-          // Add the success animation controller
-          // that will handle the success sequence
           SuccessAnimationController(),
         ],
       ),
       camera,
-      uiComponent,
+      // uiComponent,
     ]);
 
     camera.viewfinder.position = size / 2;

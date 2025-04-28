@@ -61,7 +61,13 @@ class AsteroidSpawner extends Component
 
     _timer += dt;
 
-    final currentAsteroids = game.children.whereType<Asteroid>().length;
+    final currentAsteroids = game.children.where((component) {
+      if (component is FlameBlocProvider<GameBloc, GameState>) {
+        return component.children.any((child) => child is Asteroid);
+      }
+      return false;
+    }).length;
+
     if (currentAsteroids >= maxAsteroids) {
       return; // Don't spawn if max asteroids already on screen
     }
