@@ -341,10 +341,10 @@ packages:
     dependency: "direct main"
     description:
       name: flame_audio
-      sha256: "46164d9a60cf735b7544a66749cb4fd0fc7196c1891a24dc4053d3b8b274a715"
+      sha256: "1f953ef04c97bfa36665318b6d3a4eadfee1e1ac7826203af432950360b77153"
       url: "https://pub.dev"
     source: hosted
-    version: "2.11.4"
+    version: "2.11.5"
   flame_behaviors:
     dependency: "direct main"
     description:
